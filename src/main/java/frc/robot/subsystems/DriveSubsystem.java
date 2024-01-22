@@ -17,6 +17,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.util.WPIUtilJNI;
 import edu.wpi.first.wpilibj.ADIS16470_IMU;
 import edu.wpi.first.wpilibj.ADIS16470_IMU.IMUAxis;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.SerialPort.Port;
 import frc.robot.Constants.DriveConstants;
 import frc.utils.SwerveUtils;
@@ -244,4 +245,27 @@ public class DriveSubsystem extends SubsystemBase {
   public double getTurnRate() {
     return Nav_x.getRate() * (DriveConstants.kGyroReversed ? -1.0 : 1.0);
   }
+
+  //  AutoBuilder.configureHolonomic(
+  //     this::getPose, // Robot pose supplier
+  //     this::resetOdometry, // Method to reset odometry (will be called if your auto has a starting pose)
+  //     this::getRobotRelativeSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+  //     this::driveRobotRelative, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
+  //     new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
+  //             new PIDConstants(Constants.ModuleConstants.kDrivingP, Constants.ModuleConstants.kDrivingI, Constants.ModuleConstants.kDrivingD), // Translation PID constants
+  //             new PIDConstants(Constants.ModuleConstants.kTurningP, Constants.ModuleConstants.kTurningI, Constants.ModuleConstants.kTurningD), // Rotation PID constants
+  //             Constants.DriveConstants.kMaxSpeedMetersPerSecond, // Max module speed, in m/s
+  //             Constants.DriveConstants.kWheelBase, // Drive base radius in meters. Distance from robot center to furthest module.
+  //             new ReplanningConfig() // Default path replanning config. See the API for the options here
+  //     ),
+  //     () -> {
+  //         // Boolean supplier that controls when the path will be mirrored for the red alliance
+  //         // This will flip the path being followed to the red side of the field.
+  //         // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+
+  //         var alliance = DriverStation.getAlliance();
+          
+  //     },
+  //     this // Reference to this subsystem to set requirements
+  //   );
 }
