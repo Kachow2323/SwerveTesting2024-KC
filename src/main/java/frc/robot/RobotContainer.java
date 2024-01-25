@@ -25,8 +25,7 @@ import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import java.util.List;
 
-import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.path.PathPlannerPath;
+import com.pathplanner.lib.commands.PathPlannerAuto;
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -83,8 +82,7 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
    public Command getAutonomousCommand(){
-    PathPlannerPath autopath = PathPlannerPath.fromPathFile("Example Path");
-    return AutoBuilder.followPath(autopath);
+    return new PathPlannerAuto("New Auto");
    }
 
 //   public Command getAutonomousCommand() {
