@@ -82,7 +82,8 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
    public Command getAutonomousCommand(){
-    return new PathPlannerAuto("Go Auto");
+    return new PathPlannerAuto("AutoTest1");
+    //Returns the Selected Auto from the selected AUTO Folder
    }
 
 //   public Command getAutonomousCommand() {

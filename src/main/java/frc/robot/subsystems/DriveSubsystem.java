@@ -55,6 +55,7 @@ public class DriveSubsystem extends SubsystemBase {
   private final AHRS Nav_x = new AHRS(Port.kMXP);
 
   // Locations for the swerve drive modules relative to the robot center.
+  // Figure out if distance is in yards in meters
   Translation2d m_frontLeftLocation = new Translation2d(0.4086, 0.4086);
   Translation2d m_frontRightLocation = new Translation2d(0.4086, -0.4086);
   Translation2d m_backLeftLocation = new Translation2d(-0.4086, 0.4086);
@@ -87,6 +88,7 @@ public class DriveSubsystem extends SubsystemBase {
 
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem() {
+    // Configure Autobuilder (Auto manager/handler) for the routine
     AutoBuilder.configureHolonomic(
       this::getPose, // Robot pose supplier
       this::resetOdometry, // Method to reset odometry (will be called if your auto has a starting pose)
@@ -134,7 +136,7 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
 
-  //Drive Field Centric for Auto
+  //Drive !ROBOT! Centric for Auto
   public void driveRobotRelative(ChassisSpeeds speeds) {
     var swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(speeds);
     SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, DriveConstants.kMaxSpeedMetersPerSecond);
@@ -142,6 +144,7 @@ public class DriveSubsystem extends SubsystemBase {
     m_frontRight.setDesiredState(swerveModuleStates[1]);
     m_rearLeft.setDesiredState(swerveModuleStates[2]);
     m_rearRight.setDesiredState(swerveModuleStates[3]);
+    //Works for translation and rotations (Translation 2D and Rotation 2D?)
   } 
   /**
    * Resets the odometry to the specified pose.
