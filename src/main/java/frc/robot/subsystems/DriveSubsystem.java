@@ -90,7 +90,10 @@ public class DriveSubsystem extends SubsystemBase {
   // per second to the left, and rotation at 1.5 radians per second
   // counterclockwise.
   // ChassisSpeeds speeds = new ChassisSpeeds(1.0, 3.0, 1.5);
-  //Can be used to plug \in a  simple drive translation and rotation
+  //Can be used to plug in a  simple drive translation and rotation
+
+  // ChassisSpeeds speeds = ChassisSpeeds.fromFieldRelativeSpeeds(
+  // 2.0, 2.0, Math.PI / 2.0, Rotation2d.fromDegrees(45.0));
 
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem() {
