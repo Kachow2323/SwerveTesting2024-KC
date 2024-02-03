@@ -86,6 +86,12 @@ public class DriveSubsystem extends SubsystemBase {
           m_rearRight.getPosition()
       });
 
+  // Chassis speeds: 1 meter per second forward, 3 meters
+  // per second to the left, and rotation at 1.5 radians per second
+  // counterclockwise.
+  // ChassisSpeeds speeds = new ChassisSpeeds(1.0, 3.0, 1.5);
+  //Can be used to plug \in a  simple drive translation and rotation
+
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem() {
     // Configure Autobuilder (Auto manager/handler) for the routine
