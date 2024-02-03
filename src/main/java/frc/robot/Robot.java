@@ -130,25 +130,53 @@ public class Robot extends TimedRobot {
       }
 
       Imgproc.cvtColor(mat, grayMat, Imgproc.COLOR_RGB2GRAY);
-
+      var reticalSize = 20;
       AprilTagDetection[] detections = detector.detect(grayMat);
       tags.clear();
       for (AprilTagDetection detection : detections) {
-        tags.add(detection.getId());
 
-        for (var i = 0; i <= 3; i++) {
-          var j = (i + 1) % 4;
-          var pt1 = new Point(detection.getCornerX(i), detection.getCornerY(i));
-          var pt2 = new Point(detection.getCornerX(j), detection.getCornerY(j));
+        // From mentors (John & Lauren): 
+        //    1. How do you adjust the robots position using these variables?
+        //    2. How do you know when you're centered against the april tag?
+        //    3. What happens if the camera isn't mounted perfectly center? (see 4)
+        //    4. What variables affect alignment? (offset from center, mount angle...etc) -- write all of these 
+        //       as constant variables; with GOOD names (no 'i' or 'j' or 'mhm'. For example, use 'mountHeightInMeters' instead.)
+        //    5. How often does detection need to run? Can it only run while a button is pressed?
+        //    6. What is _smallest_ resolution you can use to detect april tags within your specification? (also, choose a max distance
+        //       for this to work). Smaller reoslutions evaluate exponentially faster.
+        //    7. How can april tag detection be part of a pre-comp system check? Who is responsible for writing/checking that? For this
+        //       step, please make sure there is more than one person who can do either.
+        //    8. Please agree on a branching strategy. Forks are unnecessary, and you should have a single branch that is only for
+        //       competition. 
+        //        a. For competition, we recommend 'competition/<year>', so for this year it is 'competition/2024'. All active work MUST
+        //           NOT happen on this branch -- only merge in working code to this branch
+        //        b. Make personal branches for experiments. We recommend '<Name>/<experiment>'. This should share with others what you
+        //           are trying to do. For example, 'john/photon-vision-with-webcam'.
+        //        c. When you branch is ready, push it to the repository and merge it into the competition branch using 
+        //           'git checkout <competition branch> && git merge <your branch>'. 
+        //            For example, 'git checkout competition/2024 && git merge john/photon-vision-with-webcam'
+        //    8. Think about how to pick which detection you want if more than one is on screen?
+
+        // The following variables are the most useful values
+        var tagID = detection.getId();
+        var centerX = detection.getCenterX();
+        var centerY = detection.getCenterY();
+
+        tags.add(tagID);
+
+        /// Draw debug rectangle
+
+        for (var corner = 0; corner <= 3; corner++) {
+          var nextCorner = (corner + 1) % 4;
+          var pt1 = new Point(detection.getCornerX(corner), detection.getCornerY(corner));
+          var pt2 = new Point(detection.getCornerX(nextCorner), detection.getCornerY(nextCorner));
           Imgproc.line(mat, pt1, pt2, outlineColor, 2);
         }
 
-        var cx = detection.getCenterX();
-        var cy = detection.getCenterY();
-        var ll = 10;
-        Imgproc.line(mat, new Point(cx - ll, cy), new Point(cx + ll, cy), xColor, 2);
-        Imgproc.line(mat, new Point(cx, cy - ll), new Point(cx, cy + ll), xColor, 2);
-        Imgproc.putText(mat, Integer.toString(detection.getId()), new Point (cx + ll, cy), Imgproc.FONT_HERSHEY_SIMPLEX, 1, xColor, 3);
+        // Draw debug retical
+        Imgproc.line(mat, new Point(centerX - reticalSize, centerY), new Point(centerX + reticalSize, centerY), xColor, 2);
+        Imgproc.line(mat, new Point(centerX, centerY - reticalSize), new Point(centerX, centerY + reticalSize), xColor, 2);
+        Imgproc.putText(mat, Integer.toString(tagID), new Point (centerX + reticalSize, centerY), Imgproc.FONT_HERSHEY_SIMPLEX, 1, xColor, 3);
       }
 
       SmartDashboard.putString("tag", tags.toString());
