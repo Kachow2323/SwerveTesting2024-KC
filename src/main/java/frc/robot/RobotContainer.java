@@ -18,11 +18,16 @@ import edu.wpi.first.wpilibj.PS4Controller.Button;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
+import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.Hook;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.POVButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
+
 import java.util.List;
 
 import com.pathplanner.lib.commands.PathPlannerAuto;
@@ -36,7 +41,26 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 public class RobotContainer {
   // The robot's subsystems
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
+  private final Arm arm = Arm.getInstance();
+  private final Hook hook = Hook.getInstance();
+  
 
+  private static RobotContainer instance = null;
+  private static final XboxController driverController = new XboxController(Constants.OIConstants.driverController);
+  private static final XboxController operatorController = new XboxController(Constants.OIConstants.operatorController);
+  private static final Trigger driver_A = new JoystickButton(driverController, 1),
+      driver_B = new JoystickButton(driverController, 2), driver_X = new JoystickButton(driverController, 3),
+      driver_Y = new JoystickButton(driverController, 4), driver_LB = new JoystickButton(driverController, 5),
+      driver_RB = new JoystickButton(driverController, 6), driver_VIEW = new JoystickButton(driverController, 7),
+      driver_MENU = new JoystickButton(driverController, 8);
+  private static final Trigger operator_A = new JoystickButton(operatorController, 1),
+      operator_B = new JoystickButton(operatorController, 2), operator_X = new JoystickButton(operatorController, 3),
+      operator_Y = new JoystickButton(operatorController, 4), operator_LB = new JoystickButton(operatorController, 5),
+      operator_RB = new JoystickButton(operatorController, 6), operator_VIEW = new JoystickButton(operatorController, 7),
+      operator_MENU = new JoystickButton(operatorController, 8);
+  private static final POVButton operator_DPAD_UP = new POVButton(operatorController, 0),
+  operator_DPAD_RIGHT = new POVButton(operatorController, 90), operator_DPAD_DOWN = new POVButton(operatorController, 180),
+  operator_DPAD_LEFT = new POVButton(operatorController, 270);
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
 
@@ -58,6 +82,9 @@ public class RobotContainer {
                 -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband),
                 true, true),
             m_robotDrive));
+
+    arm.setDefaultCommand(stowArm());
+    hook.setDefaultCommand(stowHook());
   }
 
   /**
@@ -70,20 +97,25 @@ public class RobotContainer {
    * {@link JoystickButton}.
    */
   private void configureButtonBindings() {
-    new JoystickButton(m_driverController, Button.kR1.value)
-        .whileTrue(new RunCommand(
-            () -> m_robotDrive.setX(),
-            m_robotDrive));
+
+    
   }
 
+  public Command stowArm() {
+    return new RunCommand(() -> arm.setArmState(States.ArmPos.STOW), arm);
+  }
+
+  public Command stowHook() {
+    return new RunCommand(() -> hook.setHookState(States.HookPos.STOW), hook);
+  }
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
    * @return the command to run in autonomous
    */
-   public Command getAutonomousCommand(){
+   public Command getPathPlannerCommand(){
     return new PathPlannerAuto("AutoTest1");
-    //Returns the Selected Auto from the selected AUTO Folder
+    
    }
 
 //   public Command getAutonomousCommand() {
