@@ -86,9 +86,11 @@ public class Arm extends SubsystemBase {
         switch (state) {
             case STOW:
                 setArmPosition(ArmConstants.stow);
+                LED.armPosition = States.ArmPos.STOW;
                 break;
             default:
                 setArmPosition(ArmConstants.score);
+                LED.armPosition = States.ArmPos.SCORE;
                 break;
         }
     }
