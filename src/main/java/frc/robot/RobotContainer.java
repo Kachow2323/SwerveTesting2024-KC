@@ -83,8 +83,8 @@ public class RobotContainer {
                 true, true),
             m_robotDrive));
 
-    arm.setDefaultCommand(stowArm());
-    hook.setDefaultCommand(stowHook());
+    // arm.setDefaultCommand(stowArm());
+    // hook.setDefaultCommand(stowHook());
   }
 
   /**
@@ -97,13 +97,7 @@ public class RobotContainer {
    * {@link JoystickButton}.
    */
   private void configureButtonBindings() {
-    new JoystickButton(m_driverController, Button.kR1.value)
-        .whileTrue(new RunCommand(
-            () -> m_robotDrive.setX(),
-            m_robotDrive));
 
-    arm.setDefaultCommand(stowArm());
-    // hook.setDefaultCommand(stowHook());
   }
 
   public Command stowArm() {
