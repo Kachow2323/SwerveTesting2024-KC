@@ -114,9 +114,9 @@ public class RobotContainer {
     return new RunCommand(() -> arm.setArmState(States.ArmPos.SCORE), arm);
   }
 
-//   public Command stowHook() {
-//     return new RunCommand(() -> hook.setHookState(States.HookPos.STOW), hook);
-//   }
+  public Command stowHook() {
+    return new RunCommand(() -> hook.setHookState(States.HookPos.STOW), hook);
+  }
 
   public void bindOI(){
 
@@ -131,7 +131,7 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
-  public Command getAutonomousCommand() {
+  public Command getPathPlannerCommand() {
     return new PathPlannerAuto("TestAuto");
   }
 }

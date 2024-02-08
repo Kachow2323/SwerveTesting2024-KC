@@ -150,6 +150,8 @@ public final class Constants {
     public static final int leftArmMotorID = 0;
     public static final double stow = 0;
     public static final double score = 0;
+    public static final double pidOutputLow = 0;
+    public static final double pidOutputHigh = 0;
     public static double kP = 0.1;
     public static double kI = 0.0;
     public static double kD = 0.05;
@@ -158,12 +160,10 @@ public final class Constants {
 
   public static int c_driverController;
 
-  // public static final class HookConstants {
-
-  //   public static final int motorID = 0;
-  //   public static final double stow = 0;
-  //   public static final double open = 0;
-  //   public static final double score = 0;
-
-  // }
+  public static final class HookConstants {
+    public static final int motorID = 0;
+    public static final double stow = 0;
+    public static final double open = 0;
+    public static final double score = 0;
+  }
 }

@@ -16,8 +16,8 @@ import frc.utils.Util;
 
 
 public class Arm extends SubsystemBase {
-    private static final CANSparkMax motorR = Util.createSparkMAX(ArmConstants.rightMotorID, MotorType.kBrushless);
-    private static final CANSparkMax motorL = Util.createSparkMAX(ArmConstants.leftMotorID, MotorType.kBrushless);
+    private static final CANSparkMax motorR = Util.createSparkMAX(ArmConstants.rightArmMotorID, MotorType.kBrushless);
+    private static final CANSparkMax motorL = Util.createSparkMAX(ArmConstants.leftArmMotorID, MotorType.kBrushless);
     private SparkAbsoluteEncoder armEncoder = motorR.getAbsoluteEncoder(Type.kDutyCycle);
     private RelativeEncoder relArmEncoder = motorR.getEncoder();
 
@@ -33,12 +33,8 @@ public class Arm extends SubsystemBase {
     
     
     private Arm() {
-    
-    
         resetEncoders();
-       
-        motorR.setInverted(false);
-       
+              
         motorL.follow(motorR, true);
        
         motorR.setIdleMode(IdleMode.kBrake);
@@ -50,7 +46,7 @@ public class Arm extends SubsystemBase {
         pidController.setD(ArmConstants.kD);
         pidController.setIZone(0);
         pidController.setFF(0);
-        pidController.setOutputRange(-0.3, 0.3);
+        pidController.setOutputRange(ArmConstants.pidOutputLow, ArmConstants.pidOutputHigh);
         register();
     }
 

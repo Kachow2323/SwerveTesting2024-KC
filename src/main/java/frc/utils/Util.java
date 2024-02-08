@@ -26,7 +26,7 @@ public class Util {
 
     private static int sparkMAXDefaultCurrentLimit = 40;
 
-    private static double voltageCompensation = Constants.kMaxVoltage;
+    //private static double voltageCompensation = Constants.kMaxVoltage;
     
 
     /**
