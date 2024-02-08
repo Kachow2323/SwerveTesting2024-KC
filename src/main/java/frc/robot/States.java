@@ -10,10 +10,11 @@ public final class States {
     }
 
     public enum HookPos {
-        STOW(0), OPEN(1), SCORE(2);
+        STOW(0), OPEN(1);//, SCORE(2);
         int val;
         private HookPos(int val) {
             this.val = val;
         }
     }
 }
+// Class to refer to all arm and hook states
