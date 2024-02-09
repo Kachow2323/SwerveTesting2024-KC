@@ -34,14 +34,15 @@ public class Arm extends SubsystemBase {
     
     private Arm() {
         resetEncoders();
-              
+        motorR.setInverted(false);
+        motorL.setInverted(true);
         motorL.follow(motorR, true);
        
         motorR.setIdleMode(IdleMode.kBrake);
         motorL.setIdleMode(IdleMode.kBrake);
 
         pidController = motorR.getPIDController();
-        pidController.setP(ArmConstants.kP); //0.1
+        pidController.setP(ArmConstants.kP); //0.1  All values currently set to 0.0
         pidController.setI(ArmConstants.kI);//0.01
         pidController.setD(ArmConstants.kD);
         pidController.setIZone(0);

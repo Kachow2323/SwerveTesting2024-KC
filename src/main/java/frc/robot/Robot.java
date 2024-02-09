@@ -91,6 +91,7 @@ public class Robot extends TimedRobot {
     //     Transform3d pose = PoseEstimator.estimate(detection);
     //   }
     // }
+    m_robotContainer = new RobotContainer();
   }
 
   void apriltagVisionThreadProc() {

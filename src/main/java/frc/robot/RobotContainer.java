@@ -22,6 +22,7 @@ import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.Hook;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -97,12 +98,14 @@ public class RobotContainer {
    * {@link JoystickButton}.
    */
   private void configureButtonBindings() {
-
+    driver_X.whileTrue(
+      new RunCommand(() -> arm.setOpenLoop(0.5), arm)
+      ).onFalse(new InstantCommand(() -> arm.setOpenLoop(0)));
   }
 
-  public Command stowArm() {
-    return new RunCommand(() -> arm.setArmState(States.ArmPos.STOW), arm);
-  }
+  // public Command stowArm() {
+  //   return new RunCommand(() -> arm.setArmState(States.ArmPos.STOW), arm);
+  // }
 
   public Command scoreArm(){
     return new RunCommand(() -> arm.setArmState(States.ArmPos.SCORE), arm);
@@ -114,8 +117,8 @@ public class RobotContainer {
 
   public void bindOI(){
 
-    driver_X
-        .onTrue(stowArm());
+    // driver_X
+    //     .onTrue(stowArm());
     
     driver_Y
         .onTrue(scoreArm());

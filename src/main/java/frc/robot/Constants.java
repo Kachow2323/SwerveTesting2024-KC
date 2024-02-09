@@ -146,22 +146,22 @@ public final class Constants {
 
   public static final class ArmConstants {
     // add id's
-    public static final int rightArmMotorID = 0;
-    public static final int leftArmMotorID = 0;
+    public static final int rightArmMotorID = 11;
+    public static final int leftArmMotorID = 10;
     public static final double stow = 0;
     public static final double score = 0;
-    public static final double pidOutputLow = 0;
-    public static final double pidOutputHigh = 0;
-    public static double kP = 0.1;
+    public static final double pidOutputLow = -0.5;
+    public static final double pidOutputHigh = 0.5;
+    public static double kP = 0;
     public static double kI = 0.0;
-    public static double kD = 0.05;
+    public static double kD = 0;
 
   }
 
   public static int c_driverController;
 
   public static final class HookConstants {
-    public static final int motorID = 0;
+    public static final int motorID = 13;
     public static final double stow = 0;
     public static final double open = 0;
     public static final double score = 0;
