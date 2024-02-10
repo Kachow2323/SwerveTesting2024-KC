@@ -89,9 +89,11 @@ public class Arm extends SubsystemBase {
     public void setArmState(States.ArmPos state) {
         switch (state) {
             case STOW:
+                SmartDashboard.putNumber("Position",0);
                 setArmPosition(ArmConstants.stow);
                 break;
             default:
+                SmartDashboard.putNumber("Position", 1);
                 setArmPosition(ArmConstants.score);
                 break;
         }

@@ -150,13 +150,13 @@ public final class Constants {
     public static final int rightArmMotorID = 9;
     public static final int leftArmMotorID = 10;
     public static final double stow = 0.; // 0.318 abs
-    public static final double score = 0.9;
+    public static final double score = 1.62;//relative encoder DO NOT use 1.65
     public static final double max = 0.9385;
-    public static final double pidOutputLow = -0.5;
-    public static final double pidOutputHigh = 0.5;
-    public static double kP = 0.5;
+    public static final double pidOutputLow = -0.8;
+    public static final double pidOutputHigh = 1;
+    public static double kP = 2;
     public static double kI = 0.0;
-    public static double kD = 0.05;
+    public static double kD = 0.0;
 
   }
 

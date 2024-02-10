@@ -128,8 +128,9 @@ public class RobotContainer {
 
     driver_X.onTrue(
       new InstantCommand(() -> arm.setArmState(States.ArmPos.STOW)));
-      new InstantCommand(() -> hook.setHookState(States.HookPos.STOW));
-      
+      //new InstantCommand(() -> hook.setHookState(States.HookPos.STOW));
+    driver_Y.onTrue(
+      new InstantCommand(() -> arm.setArmState(States.ArmPos.SCORE)));
   }
 
   // public Command stowArm() {
