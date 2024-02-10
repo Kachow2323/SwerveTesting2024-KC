@@ -41,34 +41,46 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
  */
 public class RobotContainer {
   // The robot's subsystems
-  private final DriveSubsystem m_robotDrive = new DriveSubsystem();
-  private final Arm arm = Arm.getInstance();
-  private final Hook hook = Hook.getInstance();
+  private final DriveSubsystem m_robotDrive;
+  private final Arm arm;
+  private final Hook hook;
   
 
   private static RobotContainer instance = null;
-  private static final XboxController driverController = new XboxController(Constants.OIConstants.driverController);
   private static final XboxController operatorController = new XboxController(Constants.OIConstants.operatorController);
-  private static final Trigger driver_A = new JoystickButton(driverController, 1),
-      driver_B = new JoystickButton(driverController, 2), driver_X = new JoystickButton(driverController, 3),
-      driver_Y = new JoystickButton(driverController, 4), driver_LB = new JoystickButton(driverController, 5),
-      driver_RB = new JoystickButton(driverController, 6), driver_VIEW = new JoystickButton(driverController, 7),
-      driver_MENU = new JoystickButton(driverController, 8);
-  private static final Trigger operator_A = new JoystickButton(operatorController, 1),
-      operator_B = new JoystickButton(operatorController, 2), operator_X = new JoystickButton(operatorController, 3),
-      operator_Y = new JoystickButton(operatorController, 4), operator_LB = new JoystickButton(operatorController, 5),
-      operator_RB = new JoystickButton(operatorController, 6), operator_VIEW = new JoystickButton(operatorController, 7),
-      operator_MENU = new JoystickButton(operatorController, 8);
-  private static final POVButton operator_DPAD_UP = new POVButton(operatorController, 0),
-  operator_DPAD_RIGHT = new POVButton(operatorController, 90), operator_DPAD_DOWN = new POVButton(operatorController, 180),
-  operator_DPAD_LEFT = new POVButton(operatorController, 270);
-  // The driver's controller
-  XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
+  private static final XboxController driverController = new XboxController(OIConstants.kDriverControllerPort);
 
+
+  private static final Trigger driver_A = new JoystickButton(driverController, 1),
+    driver_B = new JoystickButton(driverController, 2), driver_X = new JoystickButton(driverController, 3),
+    driver_Y = new JoystickButton(driverController, 4), driver_LB = new JoystickButton(driverController, 5),
+    driver_RB = new JoystickButton(driverController, 6), driver_VIEW = new JoystickButton(driverController, 7),
+    driver_MENU = new JoystickButton(driverController, 8);
+  private static final Trigger operator_A = new JoystickButton(operatorController, 1),
+    operator_B = new JoystickButton(operatorController, 2), operator_X = new JoystickButton(operatorController, 3),
+    operator_Y = new JoystickButton(operatorController, 4), operator_LB = new JoystickButton(operatorController, 5),
+    operator_RB = new JoystickButton(operatorController, 6), operator_VIEW = new JoystickButton(operatorController, 7),
+    operator_MENU = new JoystickButton(operatorController, 8);
+  
+  private static final POVButton operator_DPAD_UP = new POVButton(operatorController, 0),
+    operator_DPAD_RIGHT = new POVButton(operatorController, 90), operator_DPAD_DOWN = new POVButton(operatorController, 180),
+    operator_DPAD_LEFT = new POVButton(operatorController, 270);
+  private static final POVButton driver_DPAD_UP = new POVButton(driverController, 0),
+    driver_DPAD_RIGHT = new POVButton(driverController, 90), driver_DPAD_DOWN = new POVButton(driverController, 180),
+    driver_DPAD_LEFT = new POVButton(driverController, 270);
+
+  public static RobotContainer getInstance() {
+      if(instance == null) instance = new RobotContainer();
+      return instance;
+  }
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
+    arm = Arm.getInstance();
+    hook = Hook.getInstance();
+    m_robotDrive = new DriveSubsystem();
+
     // Configure the button bindings
     configureButtonBindings();
 
@@ -78,9 +90,9 @@ public class RobotContainer {
         // Turning is controlled by the X axis of the right stick.
         new RunCommand(
             () -> m_robotDrive.drive(
-                -MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband),
-                -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband),
-                -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband),
+                -MathUtil.applyDeadband(driverController.getLeftY(), OIConstants.kDriveDeadband),
+                -MathUtil.applyDeadband(driverController.getLeftX(), OIConstants.kDriveDeadband),
+                -MathUtil.applyDeadband(driverController.getRightX(), OIConstants.kDriveDeadband),
                 true, true),
             m_robotDrive));
 
@@ -98,9 +110,26 @@ public class RobotContainer {
    * {@link JoystickButton}.
    */
   private void configureButtonBindings() {
-    driver_X.whileTrue(
-      new RunCommand(() -> arm.setOpenLoop(0.5), arm)
+    driver_DPAD_RIGHT.whileTrue(
+      new RunCommand(() -> arm.setOpenLoop(0.1), arm)
       ).onFalse(new InstantCommand(() -> arm.setOpenLoop(0)));
+
+    driver_DPAD_LEFT.whileTrue(
+      new RunCommand(() -> arm.setOpenLoop(-0.1), arm)
+      ).onFalse(new InstantCommand(() -> arm.setOpenLoop(0)));
+
+    driver_DPAD_UP.whileTrue(
+      new RunCommand(() -> hook.setOpenLoop(0.1), hook)
+      ).onFalse(new InstantCommand(() -> hook.setOpenLoop(0)));
+
+    driver_DPAD_DOWN.whileTrue(
+      new RunCommand(() -> hook.setOpenLoop(-0.1), hook)
+      ).onFalse(new InstantCommand(() -> hook.setOpenLoop(0)));
+
+    driver_X.onTrue(
+      new InstantCommand(() -> arm.setArmState(States.ArmPos.STOW)));
+      new InstantCommand(() -> hook.setHookState(States.HookPos.STOW));
+      
   }
 
   // public Command stowArm() {
@@ -122,6 +151,8 @@ public class RobotContainer {
     
     driver_Y
         .onTrue(scoreArm());
+
+ 
   }
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.

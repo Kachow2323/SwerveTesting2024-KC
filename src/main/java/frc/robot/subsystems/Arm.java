@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.SparkAbsoluteEncoder.Type;
+import com.revrobotics.SparkMaxAbsoluteEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.RelativeEncoder;
@@ -35,18 +36,18 @@ public class Arm extends SubsystemBase {
     private Arm() {
         resetEncoders();
         motorR.setInverted(false);
-        motorL.setInverted(true);
         motorL.follow(motorR, true);
        
         motorR.setIdleMode(IdleMode.kBrake);
         motorL.setIdleMode(IdleMode.kBrake);
-
+        // armEncoder.setZeroOffset();
         pidController = motorR.getPIDController();
+        // pidController.setFeedbackDevice(armEncoder);
         pidController.setP(ArmConstants.kP); //0.1  All values currently set to 0.0
         pidController.setI(ArmConstants.kI);//0.01
         pidController.setD(ArmConstants.kD);
         pidController.setIZone(0);
-        pidController.setFF(0);
+        // pidController.setFF(0);
         pidController.setOutputRange(ArmConstants.pidOutputLow, ArmConstants.pidOutputHigh);
         register();
     }
@@ -73,7 +74,9 @@ public class Arm extends SubsystemBase {
     
     @Override
     public void periodic() {
-        
+        SmartDashboard.putNumber("right Arm abs encoder", (armEncoder).getPosition());
+        SmartDashboard.putNumber("right Arm abs encoder degrees", 360.0*armEncoder.getPosition());
+        SmartDashboard.putNumber("right Arm Relative encoder value", relArmEncoder.getPosition());
     }
     
 

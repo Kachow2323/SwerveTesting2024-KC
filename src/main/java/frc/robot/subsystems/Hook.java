@@ -18,8 +18,8 @@ import frc.utils.Util;
 
 public class Hook extends SubsystemBase {
     private static final CANSparkMax motor = Util.createSparkMAX(HookConstants.motorID, MotorType.kBrushless);
-    private SparkAbsoluteEncoder armEncoder = motor.getAbsoluteEncoder(Type.kDutyCycle);
-    private RelativeEncoder relArmEncoder = motor.getEncoder();
+    private SparkAbsoluteEncoder hookEncoder = motor.getAbsoluteEncoder(Type.kDutyCycle);
+    private RelativeEncoder relHookEncoder = motor.getEncoder();
 
     private SparkPIDController pidController;
     
@@ -42,12 +42,13 @@ public class Hook extends SubsystemBase {
         motor.setIdleMode(IdleMode.kBrake);
 
         pidController = motor.getPIDController();
+        pidController.setFeedbackDevice(hookEncoder);
         pidController.setP(ArmConstants.kP); //0.1
         pidController.setI(ArmConstants.kI);//0.01
         pidController.setD(ArmConstants.kD);
         pidController.setIZone(0);
         pidController.setFF(0);
-        pidController.setOutputRange(-0.3, 0.3);
+        pidController.setOutputRange(HookConstants.pidOutputLow, HookConstants.pidOutputHigh);
         register();
     }
 
@@ -68,12 +69,12 @@ public class Hook extends SubsystemBase {
      * Resets encoders to zero
      */
     public void resetEncoders() {
-        relArmEncoder.setPosition(0.0);
+        relHookEncoder.setPosition(0.0);
     }
     
     @Override
     public void periodic() {
-        
+        SmartDashboard.putNumber("hook abs encoder", (hookEncoder).getPosition());
     }
     
 
@@ -86,7 +87,7 @@ public class Hook extends SubsystemBase {
     public void setHookPositionDegree(double degreePosition) { //define degreePosition earlier
         double convertDeg = 11.375;
         double encoderPosition = degreePosition*convertDeg; //degree to encoder
-        double currentPosition = armEncoder.getPosition(); 
+        double currentPosition = hookEncoder.getPosition(); 
         SmartDashboard.putNumber("degreePosition", degreePosition);
         SmartDashboard.putNumber("encoder value", encoderPosition);
         SmartDashboard.putNumber("current arm position", currentPosition);
