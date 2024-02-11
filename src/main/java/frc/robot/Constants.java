@@ -168,9 +168,9 @@ public final class Constants {
     public static final double open = 0.343;
     public static final double score = 0.436;
     public static final double pidOutputLow = 0;
-    public static double kP = 0.2;
+    public static double kP = 0.8;
     public static double kI = 0.0;
-    public static double kD = 0.1;
+    public static double kD = 0.3;
     public static double pidOutputHigh;
   }
 }

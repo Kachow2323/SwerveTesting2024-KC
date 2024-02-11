@@ -127,10 +127,8 @@ public class RobotContainer {
       ).onFalse(new InstantCommand(() -> hook.setOpenLoop(0)));
 
     driver_A
-      .whileTrue(
+      .onTrue(
         new InstantCommand(() -> hook.setHookState(States.HookPos.OPEN))
-      )
-      .onFalse(new InstantCommand(() -> hook.setHookState(States.HookPos.STOW))
       );
     driver_X
       .onTrue(

@@ -81,7 +81,7 @@ public class Hook extends SubsystemBase {
 
     public void setHookPosition(double position) {
         pidController.setReference(position, ControlType.kPosition);
-        SmartDashboard.putNumber("Arm SetPoint", position);
+        SmartDashboard.putNumber("Hook SetPoint", position);
     }
 
     public void setHookPositionDegree(double degreePosition) { //define degreePosition earlier
