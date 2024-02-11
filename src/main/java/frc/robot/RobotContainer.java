@@ -126,11 +126,25 @@ public class RobotContainer {
       new RunCommand(() -> hook.setOpenLoop(-0.1), hook)
       ).onFalse(new InstantCommand(() -> hook.setOpenLoop(0)));
 
-    driver_X.onTrue(
-      new InstantCommand(() -> arm.setArmState(States.ArmPos.STOW)));
-      //new InstantCommand(() -> hook.setHookState(States.HookPos.STOW));
-    driver_Y.onTrue(
-      new InstantCommand(() -> arm.setArmState(States.ArmPos.SCORE)));
+    driver_A
+      .whileTrue(
+        new InstantCommand(() -> hook.setHookState(States.HookPos.OPEN))
+      )
+      .onFalse(new InstantCommand(() -> hook.setHookState(States.HookPos.STOW))
+      );
+    driver_X
+      .onTrue(
+        new InstantCommand(() -> arm.setArmState(States.ArmPos.STOW))
+      )
+      .onTrue(
+        new InstantCommand(() -> hook.setHookState(States.HookPos.STOW))
+      );
+    driver_Y
+      .onTrue(
+        new InstantCommand(() -> arm.setArmState(States.ArmPos.SCORE)))
+      .onTrue(
+        new InstantCommand(() -> hook.setHookState(States.HookPos.SCORE))
+      );
   }
 
   // public Command stowArm() {
