@@ -17,11 +17,12 @@ import frc.robot.States;
 import frc.utils.Util;
 
 public class Hook extends SubsystemBase {
-    private static final CANSparkMax motor = Util.createSparkMAX(HookConstants.motorID, MotorType.kBrushless);
+    private static final CANSparkMax motor = Util.createSparkMAX(HookConstants.motorID, MotorType.kBrushless, 20);
     private SparkAbsoluteEncoder hookEncoder = motor.getAbsoluteEncoder(Type.kDutyCycle);
     private RelativeEncoder relHookEncoder = motor.getEncoder();
 
     private SparkPIDController pidController;
+    public double enable = 0;
     
     
     private static Hook instance;
@@ -42,10 +43,10 @@ public class Hook extends SubsystemBase {
         motor.setIdleMode(IdleMode.kBrake);
 
         pidController = motor.getPIDController();
-        pidController.setFeedbackDevice(hookEncoder);
-        pidController.setP(ArmConstants.kP); //0.1
-        pidController.setI(ArmConstants.kI);//0.01
-        pidController.setD(ArmConstants.kD);
+        pidController.setFeedbackDevice(hookEncoder); //Currently set to rel encoder
+        pidController.setP(HookConstants.kP); //0.1
+        pidController.setI(HookConstants.kI);//0.01
+        pidController.setD(HookConstants.kD);
         pidController.setIZone(0);
         pidController.setFF(0);
         pidController.setOutputRange(HookConstants.pidOutputLow, HookConstants.pidOutputHigh);
@@ -74,7 +75,11 @@ public class Hook extends SubsystemBase {
     
     @Override
     public void periodic() {
-        SmartDashboard.putNumber("hook abs encoder", (hookEncoder).getPosition());
+        SmartDashboard.putNumber("hook abs encoder", hookEncoder.getPosition());
+        SmartDashboard.putNumber("hook rel encoder", relHookEncoder.getPosition());
+        SmartDashboard.putNumber("Hook Voltage", motor.getBusVoltage());
+        SmartDashboard.putNumber("Hook Output Current", motor.getOutputCurrent());
+        SmartDashboard.putNumber("Score set", enable);
     }
     
 
@@ -82,6 +87,7 @@ public class Hook extends SubsystemBase {
     public void setHookPosition(double position) {
         pidController.setReference(position, ControlType.kPosition);
         SmartDashboard.putNumber("Hook SetPoint", position);
+        enable = position;
     }
 
     public void setHookPositionDegree(double degreePosition) { //define degreePosition earlier
@@ -91,6 +97,7 @@ public class Hook extends SubsystemBase {
         SmartDashboard.putNumber("degreePosition", degreePosition);
         SmartDashboard.putNumber("encoder value", encoderPosition);
         SmartDashboard.putNumber("current arm position", currentPosition);
+        
     }
 
     public void setHookState(States.HookPos state) {

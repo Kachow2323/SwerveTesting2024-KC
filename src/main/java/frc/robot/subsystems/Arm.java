@@ -111,4 +111,6 @@ public class Arm extends SubsystemBase {
         SmartDashboard.putNumber("encoder value", encoderPosition);
         SmartDashboard.putNumber("current arm position", currentPosition);
     }
+
+    
 }

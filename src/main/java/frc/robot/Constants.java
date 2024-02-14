@@ -164,13 +164,14 @@ public final class Constants {
 
   public static final class HookConstants {
     public static final int motorID = 11;
-    public static final double stow = 0.505;
+    public static final double stow = 0.509;
     public static final double open = 0.343;
-    public static final double score = 0.436;
-    public static final double pidOutputLow = 0;
-    public static double kP = 0.8;
-    public static double kI = 0.0;
-    public static double kD = 0.3;
-    public static double pidOutputHigh;
+    public static final double score = 0.380; //0.436 rel encoder -0.25
+    public static final double pidOutputLow = -0.5;
+    public static final double pidOutputHigh = 0.5;
+    public static double kP = 1.5;
+    public static double kI = 0.006;
+    public static double kD = 0.0;
+    
   }
 }

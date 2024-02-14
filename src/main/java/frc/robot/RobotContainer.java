@@ -24,7 +24,9 @@ import frc.robot.subsystems.Hook;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -96,8 +98,8 @@ public class RobotContainer {
                 true, true),
             m_robotDrive));
 
-    // arm.setDefaultCommand(stowArm());
-    // hook.setDefaultCommand(stowHook());
+    arm.setDefaultCommand(stowArm());
+    hook.setDefaultCommand(stowHook());
   }
 
   /**
@@ -127,27 +129,30 @@ public class RobotContainer {
       ).onFalse(new InstantCommand(() -> hook.setOpenLoop(0)));
 
     driver_A
-      .onTrue(
-        new InstantCommand(() -> hook.setHookState(States.HookPos.OPEN))
+      .whileTrue(
+        new RunCommand(() -> hook.setHookState(States.HookPos.OPEN), hook)
       );
     driver_X
-      .onTrue(
-        new InstantCommand(() -> arm.setArmState(States.ArmPos.STOW))
+      .whileTrue(
+        new RunCommand(() -> arm.setArmState(States.ArmPos.STOW), arm)
       )
-      .onTrue(
-        new InstantCommand(() -> hook.setHookState(States.HookPos.STOW))
+      .whileTrue(
+        new RunCommand(() -> hook.setHookState(States.HookPos.STOW), hook)
       );
     driver_Y
-      .onTrue(
-        new InstantCommand(() -> arm.setArmState(States.ArmPos.SCORE)))
-      .onTrue(
-        new InstantCommand(() -> hook.setHookState(States.HookPos.SCORE))
+      .whileTrue(
+       new RunCommand(() -> arm.setArmState(States.ArmPos.SCORE), arm))
+      .whileTrue(
+        new SequentialCommandGroup(
+          new WaitCommand(0.),
+          new RunCommand(() -> hook.setHookState(States.HookPos.SCORE), hook)
+        )
       );
   }
 
-  // public Command stowArm() {
-  //   return new RunCommand(() -> arm.setArmState(States.ArmPos.STOW), arm);
-  // }
+  public Command stowArm() {
+    return new RunCommand(() -> arm.setArmState(States.ArmPos.STOW), arm);
+  }
 
   public Command scoreArm(){
     return new RunCommand(() -> arm.setArmState(States.ArmPos.SCORE), arm);
