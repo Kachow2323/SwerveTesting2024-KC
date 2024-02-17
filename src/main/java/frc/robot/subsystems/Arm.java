@@ -56,7 +56,12 @@ public class Arm extends SubsystemBase {
 
     public void setOpenLoop(double value) {
         SmartDashboard.putNumber("Arm Commanded arm actuation", value);
-        motorR.set(value);
+        //code stop
+        if(relArmEncoder.getPosition()>=ArmConstants.max){
+            motorR.set(0);
+        } else{
+            motorR.set(value);
+        }
         
     }
     
@@ -77,9 +82,7 @@ public class Arm extends SubsystemBase {
         SmartDashboard.putNumber("right Arm abs encoder", (armEncoder).getPosition());
         SmartDashboard.putNumber("right Arm abs encoder degrees", 360.0*armEncoder.getPosition());
         SmartDashboard.putNumber("right Arm Relative encoder value", relArmEncoder.getPosition());
-        // if(relArmEncoder.getPosition()>=ArmConstants.max){
-        //     stopArm();
-        // }
+
 
     }
     

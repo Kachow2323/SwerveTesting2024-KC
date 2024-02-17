@@ -25,7 +25,12 @@ public static Command getPathPlannerCommandAmp() {
     return new PathPlannerAuto("Simple Auto Part 2");
   }
 
-  public static Command ScoreAuto (){
+  /**
+   * Drives to AMP. Scores 1 NOTE. Leave Starting Line and drives to far side of the *
+   * Starting Pos, closest to AMP, hugging the subwoofer
+   */
+
+  public static Command ScoreAutoOneNoteAmp(){
     return new SequentialCommandGroup(
         Auto.getPathPlannerCommandAmp(),
         new RunCommand(() -> RobotContainer.getInstance().arm.setArmState(States.ArmPos.SCORE), RobotContainer.getInstance().arm),
