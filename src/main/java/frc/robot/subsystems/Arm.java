@@ -56,8 +56,8 @@ public class Arm extends SubsystemBase {
 
     public void setOpenLoop(double value) {
         SmartDashboard.putNumber("Arm Commanded arm actuation", value);
-        //code stop
-        if(relArmEncoder.getPosition()>=ArmConstants.max){
+        //code stop if it goes past these values it will break something
+        if(relArmEncoder.getPosition()>=ArmConstants.max || relArmEncoder.getPosition()==0){
             motorR.set(0);
         } else{
             motorR.set(value);
