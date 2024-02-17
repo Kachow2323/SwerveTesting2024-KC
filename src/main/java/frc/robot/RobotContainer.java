@@ -44,8 +44,8 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 public class RobotContainer {
   // The robot's subsystems
   private final DriveSubsystem m_robotDrive;
-  private final Arm arm;
-  private final Hook hook;
+  public final Arm arm;
+  public final Hook hook;
   
 
   private static RobotContainer instance = null;
@@ -177,7 +177,13 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
-  public Command getPathPlannerCommand() {
-    return new PathPlannerAuto("TestAuto");
-  }
+  // public Command getPathPlannerCommand1() {
+  //   return new PathPlannerAuto("Simple Auto Part 1");
+  // }
+
+  // public Command getPathPlannerCommand2(){
+  //   return new PathPlannerAuto("Simple Auto Part 2");
+  // }
+
+
 }

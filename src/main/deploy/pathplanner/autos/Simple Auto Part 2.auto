@@ -1,0 +1,31 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 1.9,
+      "y": 7.7
+    },
+    "rotation": 90.0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Simple Auto Path 1.5"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Simple Auto Path 2"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}
