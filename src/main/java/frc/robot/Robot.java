@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 import org.opencv.core.Mat;
 import org.opencv.core.Point;
+import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
 
@@ -24,6 +25,8 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.subsystems.Eyes;
+import frc.utils.CoordinateSpace;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -100,8 +103,10 @@ public class Robot extends TimedRobot {
   
     // Get the UsbCamera from CameraServer
     UsbCamera camera = CameraServer.startAutomaticCapture();
+
+    CoordinateSpace coordinateSpace = new CoordinateSpace(640, 480);
     // Set the resolution
-    camera.setResolution(640, 480);
+    camera.setResolution((int)coordinateSpace.width, (int)coordinateSpace.height);
 
     // Get a CvSink. This will capture Mats from the camera
     CvSink cvSink = CameraServer.getVideo();
@@ -134,6 +139,7 @@ public class Robot extends TimedRobot {
       var reticalSize = 20;
       AprilTagDetection[] detections = detector.detect(grayMat);
       tags.clear();
+      AprilTagDetection selectedTag = null;
       for (AprilTagDetection detection : detections) {
 
         // From mentors (John & Lauren): 
@@ -178,8 +184,17 @@ public class Robot extends TimedRobot {
         Imgproc.line(mat, new Point(centerX - reticalSize, centerY), new Point(centerX + reticalSize, centerY), xColor, 2);
         Imgproc.line(mat, new Point(centerX, centerY - reticalSize), new Point(centerX, centerY + reticalSize), xColor, 2);
         Imgproc.putText(mat, Integer.toString(tagID), new Point (centerX + reticalSize, centerY), Imgproc.FONT_HERSHEY_SIMPLEX, 1, xColor, 3);
+        selectedTag = detection;
       }
 
+      double commandedRotation;
+      if (selectedTag != null) {
+        final double proportionalError = Eyes.widthOffset(selectedTag, coordinateSpace) / coordinateSpace.width;
+        commandedRotation = Eyes.rotationRate(proportionalError);
+      } else {
+        commandedRotation = 0;
+      }
+      SmartDashboard.putNumber("Vision Commanded Rotation", commandedRotation);
       SmartDashboard.putString("tag", tags.toString());
       // Give the output stream a new image to display
       outputStream.putFrame(mat);

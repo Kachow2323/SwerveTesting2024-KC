@@ -53,7 +53,7 @@ public class RobotContainer {
   private static final XboxController driverController = new XboxController(OIConstants.kDriverControllerPort);
 
 
-  private static final Trigger driver_A = new JoystickButton(driverController, 1),
+  public static final Trigger driver_A = new JoystickButton(driverController, 1),
     driver_B = new JoystickButton(driverController, 2), driver_X = new JoystickButton(driverController, 3),
     driver_Y = new JoystickButton(driverController, 4), driver_LB = new JoystickButton(driverController, 5),
     driver_RB = new JoystickButton(driverController, 6), driver_VIEW = new JoystickButton(driverController, 7),
@@ -98,8 +98,8 @@ public class RobotContainer {
                 true, true),
             m_robotDrive));
 
-    arm.setDefaultCommand(stowArm());
-    hook.setDefaultCommand(stowHook());
+    // arm.setDefaultCommand(stowArm());
+    // hook.setDefaultCommand(stowHook());
   }
 
   /**
