@@ -98,8 +98,8 @@ public class RobotContainer {
                 true, true),
             m_robotDrive));
 
-    // arm.setDefaultCommand(stowArm());
-    // hook.setDefaultCommand(stowHook());
+    arm.setDefaultCommand(stowArm());
+    hook.setDefaultCommand(stowHook());
   }
 
   /**

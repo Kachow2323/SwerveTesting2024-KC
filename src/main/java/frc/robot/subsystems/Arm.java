@@ -19,7 +19,7 @@ import frc.utils.Util;
 public class Arm extends SubsystemBase {
     private static final CANSparkMax motorR = Util.createSparkMAX(ArmConstants.rightArmMotorID, MotorType.kBrushless);
     private static final CANSparkMax motorL = Util.createSparkMAX(ArmConstants.leftArmMotorID, MotorType.kBrushless);
-    private SparkAbsoluteEncoder armEncoder = motorR.getAbsoluteEncoder(Type.kDutyCycle);
+    // private SparkAbsoluteEncoder armEncoder = motorR.getAbsoluteEncoder(Type.kDutyCycle);
     private RelativeEncoder relArmEncoder = motorR.getEncoder();
 
     private SparkPIDController pidController;
@@ -57,12 +57,12 @@ public class Arm extends SubsystemBase {
     public void setOpenLoop(double value) {
         SmartDashboard.putNumber("Arm Commanded arm actuation", value);
         //code stop if it goes past these values it will break something
-        if(relArmEncoder.getPosition()>=ArmConstants.max || relArmEncoder.getPosition()==0){
-            motorR.set(0);
-        } else{
-            motorR.set(value);
-        }
-        
+        // if(relArmEncoder.getPosition() >=ArmConstants.max){
+        //     motorR.set(0);
+        // } else{
+        //     motorR.set(value);
+        // }
+        motorR.set(value);
     }
     
     public void stopArm() {
@@ -79,10 +79,12 @@ public class Arm extends SubsystemBase {
     
     @Override
     public void periodic() {
-        SmartDashboard.putNumber("right Arm abs encoder", (armEncoder).getPosition());
-        SmartDashboard.putNumber("right Arm abs encoder degrees", 360.0*armEncoder.getPosition());
+        // SmartDashboard.putNumber("right Arm abs encoder", (armEncoder).getPosition());
+        // SmartDashboard.putNumber("right Arm abs encoder degrees", 360.0*armEncoder.getPosition());
         SmartDashboard.putNumber("right Arm Relative encoder value", relArmEncoder.getPosition());
-
+        // if(relArmEncoder.getPosition() >= ArmConstants.max){
+        //     stopArm();
+        // }
 
     }
     
@@ -109,7 +111,7 @@ public class Arm extends SubsystemBase {
     public void setArmPositionDegree(double degreePosition) { //define degreePosition earlier
         double convertDeg = 11.375;
         double encoderPosition = degreePosition*convertDeg; //degree to encoder
-        double currentPosition = armEncoder.getPosition(); 
+        double currentPosition = relArmEncoder.getPosition(); 
         SmartDashboard.putNumber("degreePosition", degreePosition);
         SmartDashboard.putNumber("encoder value", encoderPosition);
         SmartDashboard.putNumber("current arm position", currentPosition);
