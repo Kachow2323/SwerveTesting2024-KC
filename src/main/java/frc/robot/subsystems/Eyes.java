@@ -7,10 +7,7 @@ public class Eyes {
 
 
     // 1. Compute direction offset from tag
-    public static double widthOffset(
-        AprilTagDetection aprilTag, 
-        CoordinateSpace coordinateSpace
-    ) {
+    public static double widthOffset(AprilTagDetection aprilTag, CoordinateSpace coordinateSpace) {
         double coordinateCenter = coordinateSpace.width/2;
         double aprilTagcenter = aprilTag.getCenterX();
         double offset = aprilTagcenter - coordinateCenter;
