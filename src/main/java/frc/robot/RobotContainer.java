@@ -130,23 +130,15 @@ public class RobotContainer {
       new RunCommand(() -> hook.setOpenLoop(-0.1), hook)
       ).onFalse(new InstantCommand(() -> hook.setOpenLoop(0)));
 
-    driver_A
+    driver_RB
       .whileTrue(
         new RunCommand(() -> hook.setHookState(States.HookPos.OPEN), hook)
       );
-    driver_X
-      .whileTrue(
-        new RunCommand(() -> arm.setArmState(States.ArmPos.STOW), arm)
-      )
+    driver_LB
       .whileTrue(
         new RunCommand(() -> hook.setHookState(States.HookPos.STOW), hook)
       );
-    driver_Y
-      .whileTrue(
-       new RunCommand(() -> arm.setArmState(States.ArmPos.SCORE), arm))
-      .whileTrue(
-        new RunCommand(() -> hook.setHookState(States.HookPos.SCORE), hook)
-      );
+
     operator_Y
       .whileTrue(
        new RunCommand(() -> {
@@ -154,12 +146,19 @@ public class RobotContainer {
         hook.setHookState(States.HookPos.SCORE);
        }, arm, hook)
       );
+    operator_X
+      .whileTrue(
+       new RunCommand(() -> {
+        arm.setArmState(States.ArmPos.STOW); 
+        hook.setHookState(States.HookPos.STOW);
+       }, arm, hook)
+      );
     operator_B
       .whileTrue(
        new RunCommand(() -> {
         SmartDashboard.putNumber("B button Working", 1);
          double rotate = Robot.getAprilTagOffset();
-         m_robotDrive.drive(0,0, rotate, true, true);
+         m_robotDrive.drive(0,0, rotate, true, false);
 
        }, m_robotDrive)
       );

@@ -23,6 +23,7 @@ public class Arm extends SubsystemBase {
     private RelativeEncoder relArmEncoder = motorR.getEncoder();
 
     private SparkPIDController pidController;
+    private SparkPIDController climbPidController;
     
     
     private static Arm instance;
@@ -99,15 +100,19 @@ public class Arm extends SubsystemBase {
         SmartDashboard.putNumber("Position", state.val);
         switch (state) {
             case STOW:
+                pidController.setP(ArmConstants.kP);
                 setArmPosition(ArmConstants.stow);
                 break;
             case CLIMB_UP:
+                pidController.setP(ArmConstants.climbP);
                 setArmPosition(ArmConstants.climb_up);
                 break;
             case CLIMB_DOWN:
+                pidController.setP(ArmConstants.climbP);
                 setArmPosition(ArmConstants.climb_down);
                 break;
             default:
+                pidController.setP(ArmConstants.kP);
                 setArmPosition(ArmConstants.score);
                 break;
         }

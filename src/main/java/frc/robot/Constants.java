@@ -153,12 +153,15 @@ public final class Constants {
     public static final double score = 1.65;//relative encoder DO NOT use 1.65
     public static final double max = 1.67; //1.69
     public static final double climb_up = 1.25;
-    public static final double climb_down = 1.25; // undetermined
+    public static final double climb_down = 0.148; 
     public static final double pidOutputLow = -0.8;
     public static final double pidOutputHigh = 1;
     public static double kP = 2;
     public static double kI = 0.0;
     public static double kD = 0.0;
+    public static double climbP = 1;
+    public static double climbI = 0.0;
+    public static double climbD = 0.0;
 
   }
 
@@ -175,5 +178,9 @@ public final class Constants {
     public static double kI = 0.015;
     public static double kD = 0.0;
     
+  }
+  public static final class VisionConstants {
+    public static final int cameraWidth = 320;
+    public static final int cameraHeight = 240; 
   }
 }

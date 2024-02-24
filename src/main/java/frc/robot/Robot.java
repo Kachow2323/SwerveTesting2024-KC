@@ -27,6 +27,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.Autonomous.Auto;
+import frc.robot.Constants.VisionConstants;
 import frc.robot.subsystems.Eyes;
 import frc.utils.CoordinateSpace;
 
@@ -113,14 +114,14 @@ public class Robot extends TimedRobot {
     // Get the UsbCamera from CameraServer
     UsbCamera camera = CameraServer.startAutomaticCapture();
 
-    CoordinateSpace coordinateSpace = new CoordinateSpace(640, 480);
+    CoordinateSpace coordinateSpace = new CoordinateSpace(VisionConstants.cameraWidth, VisionConstants.cameraHeight);
     // Set the resolution
     camera.setResolution((int)coordinateSpace.width, (int)coordinateSpace.height);
 
     // Get a CvSink. This will capture Mats from the camera
     CvSink cvSink = CameraServer.getVideo();
     // Setup a CvSource. This will send images back to the Dashboard
-    CvSource outputStream = CameraServer.putVideo("detect", 640, 480);
+    CvSource outputStream = CameraServer.putVideo("detect", VisionConstants.cameraWidth, VisionConstants.cameraHeight);
 
     // Mats are very memory expensive. Lets reuse this Mat.
     Mat mat = new Mat();
