@@ -145,6 +145,13 @@ public class RobotContainer {
       .whileTrue(
         new RunCommand(() -> hook.setHookState(States.HookPos.SCORE), hook)
       );
+    operator_Y
+      .whileTrue(
+       new RunCommand(() -> {
+        arm.setArmState(States.ArmPos.SCORE); 
+        hook.setHookState(States.HookPos.SCORE);
+       }, arm, hook)
+      );
   }
 
   public Command stowArm() {
