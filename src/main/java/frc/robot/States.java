@@ -3,8 +3,8 @@ package frc.robot;
 // Class to refer to all arm and hook states
 public final class States {
     public enum ArmPos {
-        STOW(0), SCORE(1);
-        int val;
+        STOW(0), SCORE(1), CLIMB_UP(2), CLIMB_DOWN(3);
+        public int val;
         private ArmPos(int val) {
             this.val = val;
         }

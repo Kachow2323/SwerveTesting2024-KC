@@ -15,11 +15,13 @@ import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.PS4Controller.Button;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.Eyes;
 import frc.robot.subsystems.Hook;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -98,8 +100,8 @@ public class RobotContainer {
                 true, true),
             m_robotDrive));
 
-    arm.setDefaultCommand(stowArm());
-    hook.setDefaultCommand(stowHook());
+    // arm.setDefaultCommand(stowArm());
+    // hook.setDefaultCommand(stowHook());
   }
 
   /**
@@ -151,6 +153,27 @@ public class RobotContainer {
         arm.setArmState(States.ArmPos.SCORE); 
         hook.setHookState(States.HookPos.SCORE);
        }, arm, hook)
+      );
+    operator_B
+      .whileTrue(
+       new RunCommand(() -> {
+        SmartDashboard.putNumber("B button Working", 1);
+         double rotate = Robot.getAprilTagOffset();
+         m_robotDrive.drive(0,0, rotate, true, true);
+
+       }, m_robotDrive)
+      );
+    operator_RB
+      .whileTrue(
+       new RunCommand(() -> {
+        arm.setArmState(States.ArmPos.CLIMB_UP); 
+       }, arm)
+      );
+    operator_LB
+      .whileTrue(
+       new RunCommand(() -> {
+        arm.setArmState(States.ArmPos.CLIMB_DOWN); 
+       }, arm)
       );
   }
 

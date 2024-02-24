@@ -63,10 +63,10 @@ public class Arm extends SubsystemBase {
         //     motorR.set(value);
         // }
         motorR.set(value);
+        motorL.set(value);
     }
     
     public void stopArm() {
-    
         setOpenLoop(0);
     }
     
@@ -82,9 +82,9 @@ public class Arm extends SubsystemBase {
         // SmartDashboard.putNumber("right Arm abs encoder", (armEncoder).getPosition());
         // SmartDashboard.putNumber("right Arm abs encoder degrees", 360.0*armEncoder.getPosition());
         SmartDashboard.putNumber("right Arm Relative encoder value", relArmEncoder.getPosition());
-        // if(relArmEncoder.getPosition() >= ArmConstants.max){
-        //     stopArm();
-        // }
+        if(relArmEncoder.getPosition() >= ArmConstants.max){
+            stopArm();
+        }
 
     }
     
@@ -96,13 +96,18 @@ public class Arm extends SubsystemBase {
     }
 
     public void setArmState(States.ArmPos state) {
+        SmartDashboard.putNumber("Position", state.val);
         switch (state) {
             case STOW:
-                SmartDashboard.putNumber("Position",0);
                 setArmPosition(ArmConstants.stow);
                 break;
+            case CLIMB_UP:
+                setArmPosition(ArmConstants.climb_up);
+                break;
+            case CLIMB_DOWN:
+                setArmPosition(ArmConstants.climb_down);
+                break;
             default:
-                SmartDashboard.putNumber("Position", 1);
                 setArmPosition(ArmConstants.score);
                 break;
         }

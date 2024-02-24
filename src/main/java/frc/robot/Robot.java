@@ -5,6 +5,7 @@
 package frc.robot;
 
 import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.opencv.core.Mat;
 import org.opencv.core.Point;
@@ -39,6 +40,13 @@ public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
 
   private RobotContainer m_robotContainer;
+  private static double aprilTagOffset = 0;
+  public static synchronized double getAprilTagOffset(){
+    return aprilTagOffset;
+  }
+  public static synchronized void setAprilTagOffset(double value){
+    aprilTagOffset = value;
+  }
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -195,6 +203,7 @@ public class Robot extends TimedRobot {
       } else {
         commandedRotation = 0;
       }
+      setAprilTagOffset(commandedRotation);
       SmartDashboard.putNumber("Vision Commanded Rotation", commandedRotation);
       SmartDashboard.putString("tag", tags.toString());
       // Give the output stream a new image to display
