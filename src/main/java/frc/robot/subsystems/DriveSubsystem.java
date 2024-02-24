@@ -29,6 +29,7 @@ import edu.wpi.first.wpilibj.ADIS16470_IMU;
 import edu.wpi.first.wpilibj.ADIS16470_IMU.IMUAxis;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.SerialPort.Port;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
@@ -135,6 +136,18 @@ public class DriveSubsystem extends SubsystemBase {
             m_rearLeft.getPosition(),
             m_rearRight.getPosition()
         });
+    double[] driveMotorCurrent = {
+      m_frontLeft.getDriveCurrent(), m_frontRight.getDriveCurrent(),
+      m_rearLeft.getDriveCurrent(), m_rearRight.getDriveCurrent()
+    };
+
+    double[] turnMotorCurrent = {
+      m_frontLeft.getTurnCurrent(), m_frontRight.getTurnCurrent(),
+      m_rearLeft.getTurnCurrent(), m_rearRight.getTurnCurrent()
+    };
+
+    SmartDashboard.putNumberArray("Turn motor currents", turnMotorCurrent);
+    SmartDashboard.putNumberArray("Drive motor currents", driveMotorCurrent);
   }
 
   

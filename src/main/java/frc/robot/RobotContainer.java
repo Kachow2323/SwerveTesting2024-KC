@@ -143,10 +143,7 @@ public class RobotContainer {
       .whileTrue(
        new RunCommand(() -> arm.setArmState(States.ArmPos.SCORE), arm))
       .whileTrue(
-        new SequentialCommandGroup(
-          new WaitCommand(0.),
-          new RunCommand(() -> hook.setHookState(States.HookPos.SCORE), hook)
-        )
+        new RunCommand(() -> hook.setHookState(States.HookPos.SCORE), hook)
       );
   }
 

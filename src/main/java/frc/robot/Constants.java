@@ -169,8 +169,8 @@ public final class Constants {
     public static final double score = 0.380; //0.436 rel encoder -0.25
     public static final double pidOutputLow = -0.5;
     public static final double pidOutputHigh = 0.5;
-    public static double kP = 1.5;
-    public static double kI = 0.006;
+    public static double kP = 1.7;
+    public static double kI = 0.015;
     public static double kD = 0.0;
     
   }
