@@ -83,6 +83,7 @@ public class Arm extends SubsystemBase {
         // SmartDashboard.putNumber("right Arm abs encoder", (armEncoder).getPosition());
         // SmartDashboard.putNumber("right Arm abs encoder degrees", 360.0*armEncoder.getPosition());
         SmartDashboard.putNumber("right Arm Relative encoder value", relArmEncoder.getPosition());
+        SmartDashboard.putNumber("Right Arm current", motorR.getOutputCurrent());
         if(relArmEncoder.getPosition() >= ArmConstants.max){
             stopArm();
         }

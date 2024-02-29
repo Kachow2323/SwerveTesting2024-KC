@@ -14,6 +14,7 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PS4Controller.Button;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.AutoConstants;
@@ -35,7 +36,11 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 import java.util.List;
 
+import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathPlannerAuto;
+import com.pathplanner.lib.path.GoalEndState;
+import com.pathplanner.lib.path.PathConstraints;
+import com.pathplanner.lib.path.PathPlannerPath;
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -102,6 +107,48 @@ public class RobotContainer {
 
     // arm.setDefaultCommand(stowArm());
     // hook.setDefaultCommand(stowHook());
+  }
+
+  public Command goToPositionBezier(Pose2d target) {
+    Rotation2d bezierControlPointHeading = Rotation2d.fromRadians(
+      Math.atan2(
+        target.getY() - m_robotDrive.getPose().getY(),
+        target.getX() - m_robotDrive.getPose().getX()
+      )
+    );
+    List<Translation2d> bezierPoints = PathPlannerPath.bezierFromPoses(
+        new Pose2d(
+          m_robotDrive.getPose().getX(),
+          m_robotDrive.getPose().getY(),  bezierControlPointHeading
+        ),
+        new Pose2d(target.getX(), target.getY(), bezierControlPointHeading.times(-1))
+    );
+
+    return AutoBuilder.followPath(
+      new PathPlannerPath(
+        bezierPoints, 
+        Constants.AutoConstants.pathConstraints,
+        new GoalEndState(0.0, target.getRotation())
+      )
+    );
+  }
+
+  /**
+   * Create and return a command to follow a path that takes the robot to the target pose.
+   *
+   * @return The current alliance of the robot.
+   */
+  public Command goToPosition(Pose2d target, float goalEndVelocity, float rotationDelayDistance) {
+    // Create the constraints to use while pathfinding
+    PathConstraints constraints = Constants.AutoConstants.pathConstraints;
+    // Since AutoBuilder is configured, we can use it to build pathfinding commands
+    Command pathfindingCommand = AutoBuilder.pathfindToPose(
+            target,
+            constraints,
+            goalEndVelocity, // Goal end velocity in meters/sec
+            rotationDelayDistance // Rotation delay distance in meters. This is how far the robot should travel before attempting to rotate.
+    );
+    return pathfindingCommand;
   }
 
   /**
@@ -188,6 +235,13 @@ public class RobotContainer {
     return new RunCommand(() -> hook.setHookState(States.HookPos.STOW), hook);
   }
 
+  public Command score() {
+    return new RunCommand(() -> {
+        arm.setArmState(States.ArmPos.SCORE); 
+        hook.setHookState(States.HookPos.SCORE);
+       }, arm, hook);
+  }
+
   public void bindOI(){
 
     // driver_X
@@ -197,6 +251,20 @@ public class RobotContainer {
         .onTrue(scoreArm());
 
  
+  }
+
+  /**
+   * Returns the current alliance, with false indicating blue and true indicating red.
+   * If there is no alliance, blue alliance is assumed. 
+   *
+   * @return The current alliance of the robot.
+   */
+  public boolean getAlliance() {
+     var alliance = DriverStation.getAlliance();
+    if (alliance.isPresent()) {
+      return alliance.get() == DriverStation.Alliance.Red;
+    }
+    return false;
   }
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.

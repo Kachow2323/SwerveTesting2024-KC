@@ -16,12 +16,6 @@
           "data": {
             "pathName": "Simple Auto Path 1.5"
           }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Simple Auto Path 2"
-          }
         }
       ]
     }

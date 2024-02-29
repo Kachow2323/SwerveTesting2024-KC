@@ -33,12 +33,14 @@ public static Command getPathPlannerCommandAmp() {
   public static Command ScoreAutoOneNoteAmp(){
     return new SequentialCommandGroup(
         Auto.getPathPlannerCommandAmp(),
-        new RunCommand(() -> RobotContainer.getInstance().arm.setArmState(States.ArmPos.SCORE), RobotContainer.getInstance().arm),
-        new WaitCommand(1.0),
-        new RunCommand(() -> RobotContainer.getInstance().hook.setHookState(States.HookPos.OPEN), RobotContainer.getInstance().hook),
-        new WaitCommand(0.5),
-        new RunCommand(() -> RobotContainer.getInstance().arm.setArmState(States.ArmPos.STOW), RobotContainer.getInstance().arm),
-        new RunCommand(() -> RobotContainer.getInstance().hook.setHookState(States.HookPos.STOW), RobotContainer.getInstance().hook),
+        new InstantCommand(() -> {
+          RobotContainer.getInstance().arm.setArmState(States.ArmPos.SCORE); 
+          RobotContainer.getInstance().hook.setHookState(States.HookPos.SCORE);
+         }, RobotContainer.getInstance().arm, RobotContainer.getInstance().hook)
+         .withTimeout(1.),
+        new WaitCommand(1.5),
+        new InstantCommand(() -> RobotContainer.getInstance().arm.setArmState(States.ArmPos.STOW), RobotContainer.getInstance().arm),
+        new InstantCommand(() -> RobotContainer.getInstance().hook.setHookState(States.HookPos.STOW), RobotContainer.getInstance().hook),
         Auto.getPathPlannerCommandExitStartingLine()
         );
   }

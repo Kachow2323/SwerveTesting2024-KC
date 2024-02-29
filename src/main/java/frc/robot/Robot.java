@@ -40,7 +40,7 @@ import frc.utils.CoordinateSpace;
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
 
-  private RobotContainer m_robotContainer;
+  public RobotContainer m_robotContainer;
   private static double aprilTagOffset = 0;
   public static synchronized double getAprilTagOffset(){
     return aprilTagOffset;

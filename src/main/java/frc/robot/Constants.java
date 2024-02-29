@@ -9,6 +9,7 @@ import com.revrobotics.CANSparkBase.IdleMode;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import com.pathplanner.lib.path.PathConstraints;
 import edu.wpi.first.math.util.Units;
 
 /**
@@ -130,6 +131,12 @@ public final class Constants {
     public static final double kMaxAccelerationMetersPerSecondSquared = 3;
     public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI;
     public static final double kMaxAngularSpeedRadiansPerSecondSquared = Math.PI;
+    public static final PathConstraints pathConstraints = new PathConstraints(
+      kMaxSpeedMetersPerSecond,
+      kMaxAccelerationMetersPerSecondSquared,
+      kMaxAngularSpeedRadiansPerSecond,
+      kMaxAngularSpeedRadiansPerSecondSquared
+    );
 
     public static final double kPXController = 1;
     public static final double kPYController = 1;
