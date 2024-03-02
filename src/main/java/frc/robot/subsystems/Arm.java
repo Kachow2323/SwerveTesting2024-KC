@@ -1,3 +1,4 @@
+
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkBase.IdleMode;
@@ -36,6 +37,9 @@ public class Arm extends SubsystemBase {
     
     private Arm() {
         resetEncoders();
+        motorR.setSmartCurrentLimit(18);
+        motorL.setSmartCurrentLimit(18);
+
         motorR.setInverted(false);
         motorL.follow(motorR, true);
        
@@ -84,9 +88,9 @@ public class Arm extends SubsystemBase {
         // SmartDashboard.putNumber("right Arm abs encoder degrees", 360.0*armEncoder.getPosition());
         SmartDashboard.putNumber("right Arm Relative encoder value", relArmEncoder.getPosition());
         SmartDashboard.putNumber("Right Arm current", motorR.getOutputCurrent());
-        if(relArmEncoder.getPosition() >= ArmConstants.max){
-            stopArm();
-        }
+        // if(relArmEncoder.getPosition() >= ArmConstants.max){
+        //     stopArm();
+        // }
 
     }
     

@@ -44,5 +44,20 @@ public static Command getPathPlannerCommandAmp() {
         Auto.getPathPlannerCommandExitStartingLine()
         );
   }
+  public static Command driveTime (double xspeed, double ySpeed, double rot, double sec){
+    return new RunCommand(
+      () -> RobotContainer.getInstance().m_robotDrive.drive(
+          xspeed,
+          ySpeed,
+          rot,
+          true,
+          true),
+      RobotContainer.getInstance().m_robotDrive
+      ).withTimeout(sec);
+  }
 
-}
+  public static Command driveAutoCommand(){
+    return new PathPlannerAuto("B_DriveAwayStraight2mAuto");
+    // INSERT AUTO NAME INTO THE CHOICE!
+  }
+  }

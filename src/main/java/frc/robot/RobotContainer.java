@@ -26,6 +26,7 @@ import frc.robot.subsystems.Eyes;
 import frc.robot.subsystems.Hook;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
@@ -50,7 +51,7 @@ import com.pathplanner.lib.path.PathPlannerPath;
  */
 public class RobotContainer {
   // The robot's subsystems
-  private final DriveSubsystem m_robotDrive;
+  public final DriveSubsystem m_robotDrive;
   public final Arm arm;
   public final Hook hook;
   
@@ -162,11 +163,11 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     driver_DPAD_RIGHT.whileTrue(
-      new RunCommand(() -> arm.setOpenLoop(0.1), arm)
+      new RunCommand(() -> arm.setOpenLoop(.3), arm)
       ).onFalse(new InstantCommand(() -> arm.setOpenLoop(0)));
 
     driver_DPAD_LEFT.whileTrue(
-      new RunCommand(() -> arm.setOpenLoop(-0.1), arm)
+      new RunCommand(() -> arm.setOpenLoop(-.3), arm)
       ).onFalse(new InstantCommand(() -> arm.setOpenLoop(0)));
 
     driver_DPAD_UP.whileTrue(
@@ -188,11 +189,20 @@ public class RobotContainer {
 
     operator_Y
       .whileTrue(
-       new RunCommand(() -> {
-        arm.setArmState(States.ArmPos.SCORE); 
-        hook.setHookState(States.HookPos.SCORE);
-       }, arm, hook)
+        new ParallelCommandGroup(
+          new RunCommand(() -> {
+            arm.setArmState(States.ArmPos.SCORE);
+            }, arm),
+          new SequentialCommandGroup(
+            new WaitCommand(1.8),
+            new RunCommand(() -> {
+              hook.setHookState(States.HookPos.SCORE);
+            }, hook
+            )
+          )
+        )
       );
+
     operator_X
       .whileTrue(
        new RunCommand(() -> {
