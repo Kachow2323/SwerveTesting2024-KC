@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj.PS4Controller.Button;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
+import frc.robot.Constants.HookConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.DriveSubsystem;
@@ -163,11 +164,11 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     driver_DPAD_RIGHT.whileTrue(
-      new RunCommand(() -> arm.setOpenLoop(.3), arm)
+      new RunCommand(() -> arm.setOpenLoop(.05), arm)
       ).onFalse(new InstantCommand(() -> arm.setOpenLoop(0)));
 
     driver_DPAD_LEFT.whileTrue(
-      new RunCommand(() -> arm.setOpenLoop(-.3), arm)
+      new RunCommand(() -> arm.setOpenLoop(-.05), arm)
       ).onFalse(new InstantCommand(() -> arm.setOpenLoop(0)));
 
     driver_DPAD_UP.whileTrue(
@@ -194,7 +195,7 @@ public class RobotContainer {
             arm.setArmState(States.ArmPos.SCORE);
             }, arm),
           new SequentialCommandGroup(
-            new WaitCommand(1.8),
+            new WaitCommand(HookConstants.delay),
             new RunCommand(() -> {
               hook.setHookState(States.HookPos.SCORE);
             }, hook

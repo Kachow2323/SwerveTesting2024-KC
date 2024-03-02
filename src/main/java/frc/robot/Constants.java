@@ -157,8 +157,8 @@ public final class Constants {
     public static final int rightArmMotorID = 9;
     public static final int leftArmMotorID = 10;
     public static final double stow = 0.120; //0.; // 0.318 abs
-    public static final double score = 7.8; //7.904655; //8.268729; //1.65;//relative encoder DO NOT use 1.65
-    public static final double max = 8.28; //1.69
+    public static final double score = 8.15; //7.904655; //8.268729; //1.65;//relative encoder DO NOT use 1.65
+    public static final double max = 8.16; //8.21!
     public static final double climb_up = 7.238430; //1.25;
     public static final double climb_down = -.15; //0.148; 
     public static final double pidOutputLow = -0.8;
@@ -181,6 +181,7 @@ public final class Constants {
     public static final double score = 0.356037;//0.380; //0.436 rel encoder -0.25
     public static final double pidOutputLow = -0.5;
     public static final double pidOutputHigh = 0.5;
+    public static final double delay = 1.85;
     public static double kP = 1.5; //1.7;
     public static double kI = 0.;//0.015;
     public static double kD = 0.0;

@@ -57,7 +57,7 @@ public static Command getPathPlannerCommandAmp() {
   }
 
   public static Command driveAutoCommand(){
-    return new PathPlannerAuto("B_DriveAwayStraight2mAuto");
+    return new PathPlannerAuto("R_DriveAwayStraight3mAuto");
     // INSERT AUTO NAME INTO THE CHOICE!
   }
   }
