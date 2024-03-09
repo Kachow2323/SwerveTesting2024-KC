@@ -241,7 +241,8 @@ public class Robot extends TimedRobot {
   public void autonomousInit() {
     // m_autonomousCommand = Auto.ScoreAutoOneNoteAmp();
     // m_autonomousCommand = Auto.driveTime(1,1 ,1 ,1 ); // replace with actual values
-    m_autonomousCommand = Auto.driveAutoCommand();
+    // m_autonomousCommand = null;
+    m_autonomousCommand = null; //Auto.driveAutoCommand();
     /*
      * String autoSelected = SmartDashboard.getString("Auto Selector",
      * "Default"); switch(autoSelected) { case "My Auto": autonomousCommand

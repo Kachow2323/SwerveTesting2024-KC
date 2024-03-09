@@ -114,7 +114,7 @@ public class Arm extends SubsystemBase {
                 break;
             case CLIMB_DOWN:
                 pidController.setP(ArmConstants.climbP);
-                setArmPosition(ArmConstants.climb_down);
+                setArmPosition(ArmConstants.stow);
                 break;
             default:
                 pidController.setP(ArmConstants.kP);

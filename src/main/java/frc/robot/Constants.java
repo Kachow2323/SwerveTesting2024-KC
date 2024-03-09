@@ -156,19 +156,20 @@ public final class Constants {
     // relative to absolute: relative = 5*absolute + 0.3
     public static final int rightArmMotorID = 9;
     public static final int leftArmMotorID = 10;
-    public static final double stow = 0.120; //0.; // 0.318 abs
-    public static final double score = 8.15; //7.904655; //8.268729; //1.65;//relative encoder DO NOT use 1.65
-    public static final double max = 8.16; //8.21!
-    public static final double climb_up = 7.238430; //1.25;
-    public static final double climb_down = -.15; //0.148; 
-    public static final double pidOutputLow = -0.8;
+    public static final double stow = 0.120; //0.; // 0.318 abs 500:1 - 0.120
+    public static final double score = 4.85; //7.904655; //8.268729; //1.65;//relative encoder DO NOT use 1.65 // 500:1 score - 8.15
+    public static final double max = 5; //8.21! //500:1 max - 8.16
+    public static final double climb_up = 4.143260; //1.25; //500:1 - cu - 7.238
+    public static final double climb_down = -.15; //0.148; // 500:1 cd - -.15
+    public static final double pidOutputLow = -1;
     public static final double pidOutputHigh = 1.2;
-    public static double kP = 1.2;
+    public static double kP = 1.2; //500:1 - 1.2
     public static double kI = 0.0;
-    public static double kD = 0.3;
-    public static double climbP = 1;
+    public static double kD = 0.4; // 500:1 - 0.3
+    public static double climbP = 1; // 500:1 - 1.0
     public static double climbI = 0.0;
     public static double climbD = 0.0;
+    
 
   }
 
@@ -181,7 +182,7 @@ public final class Constants {
     public static final double score = 0.356037;//0.380; //0.436 rel encoder -0.25
     public static final double pidOutputLow = -0.5;
     public static final double pidOutputHigh = 0.5;
-    public static final double delay = 1.85;
+    public static final double delay = 1.25;
     public static double kP = 1.5; //1.7;
     public static double kI = 0.;//0.015;
     public static double kD = 0.0;

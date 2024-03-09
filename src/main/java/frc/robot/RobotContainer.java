@@ -16,6 +16,7 @@ import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PS4Controller.Button;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
@@ -43,6 +44,7 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.GoalEndState;
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerPath;
+import com.pathplanner.lib.util.PathPlannerLogging;
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -56,6 +58,7 @@ public class RobotContainer {
   public final Arm arm;
   public final Hook hook;
   
+  private final Field2d field;
 
   private static RobotContainer instance = null;
   private static final XboxController operatorController = new XboxController(Constants.OIConstants.operatorController);
@@ -109,6 +112,12 @@ public class RobotContainer {
 
     // arm.setDefaultCommand(stowArm());
     // hook.setDefaultCommand(stowHook());
+
+    field = new Field2d();
+    SmartDashboard.putData("Field", field);
+    PathPlannerLogging.setLogCurrentPoseCallback((pose) -> {
+      field.setRobotPose(pose);
+    });
   }
 
   public Command goToPositionBezier(Pose2d target) {
@@ -164,18 +173,18 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     driver_DPAD_RIGHT.whileTrue(
-      new RunCommand(() -> arm.setOpenLoop(.05), arm)
+      new RunCommand(() -> arm.setOpenLoop(.2), arm)
       ).onFalse(new InstantCommand(() -> arm.setOpenLoop(0)));
 
     driver_DPAD_LEFT.whileTrue(
-      new RunCommand(() -> arm.setOpenLoop(-.05), arm)
+      new RunCommand(() -> arm.setOpenLoop(-.2), arm)
       ).onFalse(new InstantCommand(() -> arm.setOpenLoop(0)));
-
     driver_DPAD_UP.whileTrue(
       new RunCommand(() -> hook.setOpenLoop(0.1), hook)
       ).onFalse(new InstantCommand(() -> hook.setOpenLoop(0)));
 
-    driver_DPAD_DOWN.whileTrue(
+    driver_DPAD_DOWN.
+    whileTrue(
       new RunCommand(() -> hook.setOpenLoop(-0.1), hook)
       ).onFalse(new InstantCommand(() -> hook.setOpenLoop(0)));
 
@@ -232,6 +241,8 @@ public class RobotContainer {
         arm.setArmState(States.ArmPos.CLIMB_DOWN); 
        }, arm)
       );
+
+      
   }
 
   public Command stowArm() {
