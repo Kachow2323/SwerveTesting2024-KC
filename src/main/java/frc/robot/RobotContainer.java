@@ -13,6 +13,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PS4Controller.Button;
@@ -58,7 +59,7 @@ public class RobotContainer {
   public final Arm arm;
   public final Hook hook;
   
-  private final Field2d field;
+  public final Field2d field;
 
   private static RobotContainer instance = null;
   private static final XboxController operatorController = new XboxController(Constants.OIConstants.operatorController);
@@ -114,7 +115,7 @@ public class RobotContainer {
     // hook.setDefaultCommand(stowHook());
 
     field = new Field2d();
-    SmartDashboard.putData("Field", field);
+    
     PathPlannerLogging.setLogCurrentPoseCallback((pose) -> {
       field.setRobotPose(pose);
     });
@@ -130,9 +131,10 @@ public class RobotContainer {
     List<Translation2d> bezierPoints = PathPlannerPath.bezierFromPoses(
         new Pose2d(
           m_robotDrive.getPose().getX(),
-          m_robotDrive.getPose().getY(),  bezierControlPointHeading
+          m_robotDrive.getPose().getY(),  
+          bezierControlPointHeading
         ),
-        new Pose2d(target.getX(), target.getY(), bezierControlPointHeading.times(-1))
+        new Pose2d(target.getX(), target.getY(), target.getRotation())
     );
 
     return AutoBuilder.followPath(
@@ -159,6 +161,37 @@ public class RobotContainer {
             goalEndVelocity, // Goal end velocity in meters/sec
             rotationDelayDistance // Rotation delay distance in meters. This is how far the robot should travel before attempting to rotate.
     );
+    return pathfindingCommand;
+  }
+
+  public Command pathFindtoPath(String pathname) {
+    // Create the constraints to use while pathfinding
+    PathConstraints constraints = Constants.AutoConstants.pathConstraints;
+    // Since AutoBuilder is configured, we can use it to build pathfinding commands
+    Command pathfindingCommand = AutoBuilder.pathfindThenFollowPath(
+            PathPlannerPath.fromPathFile(pathname),
+            constraints,
+            2.
+           );
+    return pathfindingCommand;
+  }
+
+  public Command goToPositionFromPath(String pathname) {
+    // Load the path we want to pathfind to and follow
+    PathPlannerPath path = PathPlannerPath.fromPathFile(pathname);
+
+    // Create the constraints to use while pathfinding. The constraints defined in the path will only be used for the path.
+    PathConstraints constraints = new PathConstraints(
+            3.0, 3.0,
+            Units.degreesToRadians(540), Units.degreesToRadians(720));
+
+    // Since AutoBuilder is configured, we can use it to build pathfinding commands
+    Command pathfindingCommand = AutoBuilder.pathfindThenFollowPath(
+            path,
+            constraints,
+            0.0 // Rotation delay distance in meters. This is how far the robot should travel before attempting to rotate.
+    );
+
     return pathfindingCommand;
   }
 
@@ -196,6 +229,37 @@ public class RobotContainer {
       .whileTrue(
         new RunCommand(() -> hook.setHookState(States.HookPos.STOW), hook)
       );
+
+    // driver_X.whileTrue(
+    //   goToPosition(
+    //     new Pose2d(0.85, 1.18, Rotation2d.fromDegrees(-90)),
+    //     0, 
+    //     0)
+    // );
+
+    // driver_Y.whileTrue(
+    //   pathFindtoPath("FlyTest")
+    // );
+
+    driver_Y.whileTrue(
+      goToPosition(
+        new Pose2d(0.85, 1.18, Rotation2d.fromDegrees(90)), 0, 0)
+    );
+
+    driver_X.whileTrue(
+      goToPositionBezier(
+        new Pose2d(0.85, 1.18, Rotation2d.fromDegrees(90))
+      )
+    );
+
+    // driver_B.whileTrue(
+    //   goToPositionBezier(
+    //     new Pose2d(0, 0, Rotation2d.fromDegrees(0))
+    //   )
+
+    // );
+
+   
 
     operator_Y
       .whileTrue(
@@ -262,6 +326,21 @@ public class RobotContainer {
         arm.setArmState(States.ArmPos.SCORE); 
         hook.setHookState(States.HookPos.SCORE);
        }, arm, hook);
+  }
+
+  public Command scoreHookDelay() {
+    return new ParallelCommandGroup(
+          new RunCommand(() -> {
+            arm.setArmState(States.ArmPos.SCORE);
+            }, arm),
+          new SequentialCommandGroup(
+            new WaitCommand(HookConstants.delay),
+            new RunCommand(() -> {
+              hook.setHookState(States.HookPos.SCORE);
+            }, hook
+            )
+          )
+        );
   }
 
   public void bindOI(){

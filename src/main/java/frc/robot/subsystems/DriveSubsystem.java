@@ -31,6 +31,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.SerialPort.Port;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
+import frc.robot.RobotContainer;
 import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
 import frc.utils.SwerveUtils;
@@ -152,6 +153,10 @@ public class DriveSubsystem extends SubsystemBase {
 
     SmartDashboard.putNumberArray("Turn motor currents", turnMotorCurrent);
     SmartDashboard.putNumberArray("Drive motor currents", driveMotorCurrent);
+
+    SmartDashboard.putData("Field", RobotContainer.getInstance().field);
+    double[] pose = {getPose().getX(), getPose().getY(), getPose().getRotation().getDegrees()};
+    SmartDashboard.putNumberArray("POSE", pose);
   }
 
   

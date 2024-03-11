@@ -239,10 +239,10 @@ public class Robot extends TimedRobot {
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
-    // m_autonomousCommand = Auto.ScoreAutoOneNoteAmp();
+    m_autonomousCommand = Auto.ScoreAutoOneNoteAmp();
     // m_autonomousCommand = Auto.driveTime(1,1 ,1 ,1 ); // replace with actual values
     // m_autonomousCommand = null;
-    m_autonomousCommand = null; //Auto.driveAutoCommand();
+    // m_autonomousCommand = Auto.driveAutoCommand();
     /*
      * String autoSelected = SmartDashboard.getString("Auto Selector",
      * "Default"); switch(autoSelected) { case "My Auto": autonomousCommand

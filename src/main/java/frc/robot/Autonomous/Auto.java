@@ -32,17 +32,14 @@ public static Command getPathPlannerCommandAmp() {
 
   public static Command ScoreAutoOneNoteAmp(){
     return new SequentialCommandGroup(
-        Auto.getPathPlannerCommandAmp(),
-        new InstantCommand(() -> {
-          RobotContainer.getInstance().arm.setArmState(States.ArmPos.SCORE); 
-          RobotContainer.getInstance().hook.setHookState(States.HookPos.SCORE);
-         }, RobotContainer.getInstance().arm, RobotContainer.getInstance().hook)
-         .withTimeout(1.),
-        new WaitCommand(1.5),
-        new InstantCommand(() -> RobotContainer.getInstance().arm.setArmState(States.ArmPos.STOW), RobotContainer.getInstance().arm),
-        new InstantCommand(() -> RobotContainer.getInstance().hook.setHookState(States.HookPos.STOW), RobotContainer.getInstance().hook),
-        Auto.getPathPlannerCommandExitStartingLine()
-        );
+      Auto.getPathPlannerCommandAmp(),
+      new WaitCommand(1.),
+      RobotContainer.getInstance().scoreHookDelay().withTimeout(2.),
+      new WaitCommand(1.),
+      new InstantCommand(() -> RobotContainer.getInstance().arm.setArmState(States.ArmPos.STOW), RobotContainer.getInstance().arm),
+      new InstantCommand(() -> RobotContainer.getInstance().hook.setHookState(States.HookPos.STOW), RobotContainer.getInstance().hook),
+      Auto.getPathPlannerCommandExitStartingLine()
+    );
   }
   public static Command driveTime (double xspeed, double ySpeed, double rot, double sec){
     return new RunCommand(
