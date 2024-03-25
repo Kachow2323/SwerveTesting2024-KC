@@ -17,8 +17,9 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 
 public class Auto {
 
-public static Command getPathPlannerCommandAmp() {
-    return new PathPlannerAuto("Simple Auto Part 1");
+public static Command getPathPlannerCommandAmp(boolean blue) {
+    if (blue) return new PathPlannerAuto("Simple Auto Part 1");
+    return new PathPlannerAuto("Simple Auto Part 1 Red");
   }
 
   public static Command getPathPlannerCommandExitStartingLine(){
@@ -30,15 +31,15 @@ public static Command getPathPlannerCommandAmp() {
    * Starting Pos, closest to AMP, hugging the subwoofer
    */
 
-  public static Command ScoreAutoOneNoteAmp(){
+  public static Command ScoreAutoOneNoteAmp(boolean blue){
     return new SequentialCommandGroup(
-      Auto.getPathPlannerCommandAmp(),
+      Auto.getPathPlannerCommandAmp(blue),
       new WaitCommand(1.),
       RobotContainer.getInstance().scoreHookDelay().withTimeout(2.),
       new WaitCommand(1.),
       new InstantCommand(() -> RobotContainer.getInstance().arm.setArmState(States.ArmPos.STOW), RobotContainer.getInstance().arm),
-      new InstantCommand(() -> RobotContainer.getInstance().hook.setHookState(States.HookPos.STOW), RobotContainer.getInstance().hook),
-      Auto.getPathPlannerCommandExitStartingLine()
+      new InstantCommand(() -> RobotContainer.getInstance().hook.setHookState(States.HookPos.STOW), RobotContainer.getInstance().hook)
+      //Auto.getPathPlannerCommandExitStartingLine()
     );
   }
   public static Command driveTime (double xspeed, double ySpeed, double rot, double sec){
