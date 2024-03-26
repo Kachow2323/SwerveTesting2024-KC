@@ -27,6 +27,7 @@ import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.Eyes;
 import frc.robot.subsystems.Hook;
+import frc.robot.subsystems.LED;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
@@ -58,6 +59,7 @@ public class RobotContainer {
   public final DriveSubsystem m_robotDrive;
   public final Arm arm;
   public final Hook hook;
+  public final LED led;
   
   public final Field2d field;
 
@@ -95,6 +97,7 @@ public class RobotContainer {
     arm = Arm.getInstance();
     hook = Hook.getInstance();
     m_robotDrive = new DriveSubsystem();
+    led = LED.getInstance();
 
     // Configure the button bindings
     configureButtonBindings();
