@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.AddressableLED;
+import edu.wpi.first.wpilibj.I2C;
 import frc.robot.States;
 import frc.robot.States.ArmPos;
 import frc.robot.States.HookPos;
@@ -23,6 +24,11 @@ public class LED extends SubsystemBase {
     private static ColorSensorV3 colorSensor;
     private static LED instance;
     private static ColorMatch colorMatcher = new ColorMatch();
+
+    // IR Sensor from REV Color Sensore V3
+    private final static I2C.Port i2cPort = I2C.Port.kOnboard;
+    private final static ColorSensorV3 m_colorSensor = new ColorSensorV3(i2cPort);
+    private  static double IR = m_colorSensor.getIR();
 
     private final Color kBlackTarget = new Color(0.0, 0.0, 0.0);
     
@@ -47,7 +53,7 @@ public class LED extends SubsystemBase {
                 spark.set(0.83);
                 break;
             case SCORE:
-                spark.set(0.53);
+                spark.set(0.57);
                 break;
             default:
                 spark.set(-0.53);
@@ -62,19 +68,24 @@ public class LED extends SubsystemBase {
         Color detectedColor = colorSensor.getColor();
         ColorMatchResult match = colorMatcher.matchClosestColor(detectedColor);
         SmartDashboard.putString("COLOR", colorSensor.getColor().toString());
-        
-        if(match.color == kBlackTarget){
-            lightStateCheck(ArmPos.SCORE);
+        double IR = m_colorSensor.getIR();
+        SmartDashboard.putNumber("IR", IR);
+        int proximity = m_colorSensor.getProximity();
+        SmartDashboard.putNumber("Proximity", proximity);
+
+        if(proximity >= 700){
             System.out.println("Setting To Black");
+            lightStateCheck(ArmPos.SCORE);
         }else{
             lightStateCheck(ArmPos.STOW);
         }
         // if (colorSensor.getColor().equals(Color.kBlack)) {
         //     spark.set(-0.57);
         // } else spark.set(0.99);
-        spark.set(0.99);
+        //spark.set(0.99);
         SmartDashboard.putNumber("Current LED", spark.get());
         //else armAndHookStateCheck(armPosition, hookPosition);
+        
     }
 
     public static LED getInstance() {
