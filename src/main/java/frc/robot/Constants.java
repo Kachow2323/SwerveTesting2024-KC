@@ -163,9 +163,9 @@ public final class Constants {
     public static final double climb_down = -.15; //0.148; // 500:1 cd - -.15
     public static final double pidOutputLow = -1;
     public static final double pidOutputHigh = 1.2;
-    public static double kP = 1.2; //500:1 - 1.2
+    public static double kP = 1.5; //500:1 - 1.2
     public static double kI = 0.0;
-    public static double kD = 0.4; // 500:1 - 0.3
+    public static double kD = 0.7; // 500:1 - 0.3
     public static double climbP = 1; // 500:1 - 1.0
     public static double climbI = 0.0;
     public static double climbD = 0.0;
@@ -181,8 +181,8 @@ public final class Constants {
     public static final double open = 0.433; // 0.280;  // 0.003; //0.343; // 0.003
     public static final double score = 0.4295; // 0.276; //0.356037;// 0.014 //0.380; //0.436 rel encoder -0.25
     public static final double pidOutputLow = -0.5;
-    public static final double pidOutputHigh = 0.6;
-    public static final double delay = .95;
+    public static final double pidOutputHigh = 0.5;
+    public static final double delay = 0.95;
     public static double kP = 1.5; //1.7;
     public static double kI = 0.005;//0.015;
     public static double kD = 0.0;
