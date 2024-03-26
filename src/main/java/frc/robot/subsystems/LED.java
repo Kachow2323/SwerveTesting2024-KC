@@ -23,7 +23,7 @@ public class LED extends SubsystemBase {
     public LED (){
         armPosition = ArmPos.STOW;
         hookPosition = HookPos.STOW;
-        spark = new Spark(0);
+        spark = new Spark(1);
         colorSensor = new ColorSensorV3(Port.kOnboard);
     }
     public void armAndHookStateCheck(ArmPos armPosition, HookPos hookPosition) {
@@ -53,7 +53,7 @@ public class LED extends SubsystemBase {
         // if (colorSensor.getColor().equals(Color.kBlack)) {
         //     spark.set(-0.57);
         // } else spark.set(0.99);
-        spark.set(0.99);
+        spark.set(-0.17);
         SmartDashboard.putNumber("Current LED", spark.get());
         //else armAndHookStateCheck(armPosition, hookPosition);
     }
