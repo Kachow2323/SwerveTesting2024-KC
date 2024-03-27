@@ -73,11 +73,12 @@ public class LED extends SubsystemBase {
         int proximity = m_colorSensor.getProximity();
         SmartDashboard.putNumber("Proximity", proximity);
 
-        if(proximity >= 700){
-            System.out.println("Setting To Black");
+        if(proximity >= 161){
+            System.out.println("Detected");
             lightStateCheck(ArmPos.SCORE);
         }else{
-            lightStateCheck(ArmPos.STOW);
+            System.out.print("Not detected");
+            lightStateCheck(armPosition);
         }
         // if (colorSensor.getColor().equals(Color.kBlack)) {
         //     spark.set(-0.57);
