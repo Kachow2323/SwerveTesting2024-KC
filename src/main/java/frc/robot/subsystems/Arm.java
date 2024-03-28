@@ -107,15 +107,17 @@ public class Arm extends SubsystemBase {
             case STOW:
                 pidController.setP(ArmConstants.kP);
                 setArmPosition(ArmConstants.stow);
+                LED.armPosition = States.ArmPos.STOW;
                 break;
             case CLIMB_UP:
                 pidController.setP(ArmConstants.climbP);
                 setArmPosition(ArmConstants.climb_up);
+                LED.armPosition = States.ArmPos.CLIMB_UP;
                 break;
             case CLIMB_DOWN:
                 pidController.setP(ArmConstants.climbP);
                 setArmPosition(ArmConstants.stow);
-                LED.armPosition = States.ArmPos.STOW;
+                LED.armPosition = States.ArmPos.CLIMB_DOWN;
                 break;
             default:
                 pidController.setP(ArmConstants.kP);

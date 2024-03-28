@@ -44,19 +44,19 @@ public class LED extends SubsystemBase {
     public void lightStateCheck(ArmPos pos) {
         switch (pos) {
             case STOW:
-                spark.set(0.99);
+                spark.set(0.81); //0.81
                 break;
             case CLIMB_DOWN:
-                spark.set(-0.53);
+                spark.set(-0.61); //-0.61
                 break;
             case CLIMB_UP:
-                spark.set(0.83);
+                spark.set(-0.25); //-0.25
                 break;
             case SCORE:
-                spark.set(0.57);
+                spark.set(0.65); //0.65
                 break;
             default:
-                spark.set(-0.53);
+                spark.set(0.81);//0.81
                 break;
         }
     }
@@ -73,17 +73,18 @@ public class LED extends SubsystemBase {
         int proximity = m_colorSensor.getProximity();
         SmartDashboard.putNumber("Proximity", proximity);
 
-        if(proximity >= 161){
-            System.out.println("Detected");
-            lightStateCheck(ArmPos.SCORE);
-        }else{
-            System.out.print("Not detected");
-            lightStateCheck(armPosition);
-        }
+        // if(proximity >= 161){
+        //     System.out.println("Detected");
+        //     lightStateCheck(ArmPos.SCORE);
+        // }else{
+        //     System.out.print("Not detected");
+        //     lightStateCheck(armPosition);
+        // }
         // if (colorSensor.getColor().equals(Color.kBlack)) {
         //     spark.set(-0.57);
         // } else spark.set(0.99);
         //spark.set(0.99);
+        lightStateCheck(armPosition);
         SmartDashboard.putNumber("Current LED", spark.get());
         //else armAndHookStateCheck(armPosition, hookPosition);
         
