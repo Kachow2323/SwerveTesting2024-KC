@@ -22,8 +22,9 @@ public static Command getPathPlannerCommandAmp(boolean blue) {
     return new PathPlannerAuto("Simple Auto Part 1 Red");
   }
 
-  public static Command getPathPlannerCommandExitStartingLine(){
-    return new PathPlannerAuto("Simple Auto Part 2");
+  public static Command getPathPlannerCommandExitStartingLine(boolean blue){
+    if (blue) return new PathPlannerAuto("Simple Auto Part 2");
+    return new PathPlannerAuto("Simple Auto Part 2 Red");
   }
 
   /**
@@ -38,8 +39,9 @@ public static Command getPathPlannerCommandAmp(boolean blue) {
       RobotContainer.getInstance().scoreHookDelay().withTimeout(2.),
       new WaitCommand(1.),
       new InstantCommand(() -> RobotContainer.getInstance().arm.setArmState(States.ArmPos.STOW), RobotContainer.getInstance().arm),
-      new InstantCommand(() -> RobotContainer.getInstance().hook.setHookState(States.HookPos.STOW), RobotContainer.getInstance().hook)
-      //Auto.getPathPlannerCommandExitStartingLine()
+      new InstantCommand(() -> RobotContainer.getInstance().hook.setHookState(States.HookPos.STOW), RobotContainer.getInstance().hook),
+      new WaitCommand(1),
+      Auto.getPathPlannerCommandExitStartingLine(blue)
     );
   }
   public static Command driveTime (double xspeed, double ySpeed, double rot, double sec){
