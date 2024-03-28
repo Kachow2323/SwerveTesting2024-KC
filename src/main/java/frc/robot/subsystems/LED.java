@@ -1,18 +1,16 @@
 package frc.robot.subsystems;
 
 
-import com.revrobotics.ColorSensorV3;
 import com.revrobotics.ColorMatch;
 import com.revrobotics.ColorMatchResult;
-import edu.wpi.first.wpilibj.util.Color;
+import com.revrobotics.ColorSensorV3;
 
+import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.I2C.Port;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj.AddressableLED;
-import edu.wpi.first.wpilibj.I2C;
-import frc.robot.States;
 import frc.robot.States.ArmPos;
 import frc.robot.States.HookPos;
 
@@ -53,7 +51,7 @@ public class LED extends SubsystemBase {
                 spark.set(-0.25); //-0.25
                 break;
             case SCORE:
-                spark.set(0.65); //0.65
+                spark.set(0.65); //0.65 //test: -0.43, -0.29 
                 break;
             default:
                 spark.set(0.81);//0.81
