@@ -27,6 +27,13 @@ public static Command getPathPlannerCommandAmp(boolean blue) {
     return new PathPlannerAuto("Simple Auto Part 2 Red");
   }
 
+  public static Command RedAmp(){
+    return new PathPlannerAuto("Simple Auto Part 1 Red");
+  }
+
+  public static Command RedExit(){
+    return new PathPlannerAuto("Simple Auto Part 2 Red");
+  }
   /**
    * Drives to AMP. Scores 1 NOTE. Leave Starting Line and drives to far side of the *
    * Starting Pos, closest to AMP, hugging the subwoofer
@@ -56,8 +63,24 @@ public static Command getPathPlannerCommandAmp(boolean blue) {
       ).withTimeout(sec);
   }
 
-  public static Command driveAutoCommand(){
-    return new PathPlannerAuto("B_DriveAwayStraight3mAuto");
+  public static Command driveAutoCommand(boolean blue){
+
+    if (blue) return new PathPlannerAuto("B_DriveAwayStraight3mAuto");
+    return new PathPlannerAuto("R_DriveAwayStraight3mAuto");
     // INSERT AUTO NAME INTO THE CHOICE!
   }
+  
+public static Command RedAmpAuto(){
+    return new SequentialCommandGroup(
+      Auto.RedAmp(),
+      new WaitCommand(1.),
+      RobotContainer.getInstance().scoreHookDelay().withTimeout(2.),
+      new WaitCommand(1.),
+      new InstantCommand(() -> RobotContainer.getInstance().arm.setArmState(States.ArmPos.STOW), RobotContainer.getInstance().arm),
+      new InstantCommand(() -> RobotContainer.getInstance().hook.setHookState(States.HookPos.STOW), RobotContainer.getInstance().hook),
+      new WaitCommand(1),
+      Auto.RedExit()
+    );
+  }
+
   }
