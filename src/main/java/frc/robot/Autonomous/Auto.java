@@ -17,38 +17,32 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 
 public class Auto {
 
-public static Command getPathPlannerCommandAmp(boolean blue) {
-    if (blue) return new PathPlannerAuto("Simple Auto Part 1");
-    return new PathPlannerAuto("Simple Auto Part 1 Red");
+public static Command getPathPlannerCommandAmp() {
+    return new PathPlannerAuto("Simple Auto Part 1");
+    // return new PathPlannerAuto("Simple Auto Part 1 Red");
   }
 
-  public static Command getPathPlannerCommandExitStartingLine(boolean blue){
-    if (blue) return new PathPlannerAuto("Simple Auto Part 2");
-    return new PathPlannerAuto("Simple Auto Part 2 Red");
+  public static Command getPathPlannerCommandExitStartingLine(){
+    return new PathPlannerAuto("Simple Auto Part 2");
+    // return new PathPlannerAuto("Simple Auto Part 2 Red");
   }
 
-  public static Command RedAmp(){
-    return new PathPlannerAuto("Simple Auto Part 1 Red");
-  }
-
-  public static Command RedExit(){
-    return new PathPlannerAuto("Simple Auto Part 2 Red");
-  }
   /**
    * Drives to AMP. Scores 1 NOTE. Leave Starting Line and drives to far side of the *
    * Starting Pos, closest to AMP, hugging the subwoofer
+   * We think this is reflected with RED ALLIANCE, check DT subsys
    */
 
-  public static Command ScoreAutoOneNoteAmp(boolean blue){
+  public static Command ScoreAutoOneNoteAmp(){
     return new SequentialCommandGroup(
-      Auto.getPathPlannerCommandAmp(blue),
-      new WaitCommand(1.),
+      Auto.getPathPlannerCommandAmp(),
+      new WaitCommand(1.0),
       RobotContainer.getInstance().scoreHookDelay().withTimeout(2.),
       new WaitCommand(1.),
       new InstantCommand(() -> RobotContainer.getInstance().arm.setArmState(States.ArmPos.STOW), RobotContainer.getInstance().arm),
       new InstantCommand(() -> RobotContainer.getInstance().hook.setHookState(States.HookPos.STOW), RobotContainer.getInstance().hook),
-      new WaitCommand(1),
-      Auto.getPathPlannerCommandExitStartingLine(blue)
+      new WaitCommand(1.0),
+      Auto.getPathPlannerCommandExitStartingLine()
     );
   }
   public static Command driveTime (double xspeed, double ySpeed, double rot, double sec){
@@ -63,24 +57,34 @@ public static Command getPathPlannerCommandAmp(boolean blue) {
       ).withTimeout(sec);
   }
 
-  public static Command driveAutoCommand(boolean blue){
-
-    if (blue) return new PathPlannerAuto("B_DriveAwayStraight3mAuto");
-    return new PathPlannerAuto("R_DriveAwayStraight3mAuto");
+  public static Command driveAutoCommand(){
+    return new PathPlannerAuto("B_DriveAwayStraight3mAuto");
+    // return new PathPlannerAuto("R_DriveAwayStraight3mAuto");
     // INSERT AUTO NAME INTO THE CHOICE!
   }
-  
-public static Command RedAmpAuto(){
-    return new SequentialCommandGroup(
-      Auto.RedAmp(),
-      new WaitCommand(1.),
-      RobotContainer.getInstance().scoreHookDelay().withTimeout(2.),
-      new WaitCommand(1.),
-      new InstantCommand(() -> RobotContainer.getInstance().arm.setArmState(States.ArmPos.STOW), RobotContainer.getInstance().arm),
-      new InstantCommand(() -> RobotContainer.getInstance().hook.setHookState(States.HookPos.STOW), RobotContainer.getInstance().hook),
-      new WaitCommand(1),
-      Auto.RedExit()
-    );
-  }
+
+  // =========================
+  // Legacy Code - MBR 2024
+
+// public static Command RedAmp(){
+  //   return new PathPlannerAuto("Simple Auto Part 1 Red");
+  // }
+
+  // public static Command RedExit(){
+  //   return new PathPlannerAuto("Simple Auto Part 2 Red");
+  // }
+
+// public static Command RedAmpAuto(){
+//     return new SequentialCommandGroup(
+//       Auto.RedAmp(),
+//       new WaitCommand(1.),
+//       RobotContainer.getInstance().scoreHookDelay().withTimeout(2.),
+//       new WaitCommand(1.),
+//       new InstantCommand(() -> RobotContainer.getInstance().arm.setArmState(States.ArmPos.STOW), RobotContainer.getInstance().arm),
+//       new InstantCommand(() -> RobotContainer.getInstance().hook.setHookState(States.HookPos.STOW), RobotContainer.getInstance().hook),
+//       new WaitCommand(1),
+//       Auto.RedExit()
+//     );
+//   }
 
   }
