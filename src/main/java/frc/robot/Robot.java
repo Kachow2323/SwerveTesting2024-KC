@@ -21,6 +21,7 @@ import edu.wpi.first.cscore.CvSink;
 import edu.wpi.first.cscore.CvSource;
 import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.math.estimator.PoseEstimator;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -62,6 +63,7 @@ public class Robot extends TimedRobot {
     m_chooser.setDefaultOption("No Auto", Auto.driveTime(0, 0, 0, 0));
     m_chooser.addOption("One note score BLUE/RED", Auto.ScoreAutoOneNoteAmp());
     m_chooser.addOption("Drive forward BLUE/RED", Auto.driveAutoCommand());
+    m_chooser.addOption("Play Off Auto (D: 9 sec), 1 Amp", Auto.ScorePlayoffAuto());
     SmartDashboard.putData("AUTO CHOICES", m_chooser);
 
     Thread visionThread = new Thread(() -> apriltagVisionThreadProc());
@@ -72,7 +74,7 @@ public class Robot extends TimedRobot {
 
     // PhotonVision testing
     // m_robotContainer = new RobotContainer();
-    // CameraServer.startAutomaticCapture();
+    // CameraServer.startAutomaticCJapture();
     // CvSink cvSink = CameraServer.getVideo();
 
     // // set up AprilTag detector

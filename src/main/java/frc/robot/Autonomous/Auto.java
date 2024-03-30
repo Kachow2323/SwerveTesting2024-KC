@@ -27,6 +27,33 @@ public static Command getPathPlannerCommandAmp() {
     // return new PathPlannerAuto("Simple Auto Part 2 Red");
   }
 
+  public static Command getPathPlannerCommandFarAmp(){
+    return new PathPlannerAuto("PlayoffAuto");
+  } 
+
+  public static Command getPathPlannerCommandAutoLeave(){
+    return new PathPlannerAuto("PlayoffAuto2");
+  } 
+  
+
+  /*
+   * Play Off Auto
+   * Starts at Amp far side, waits for 2743 to finish their auto (time delay), then goes to score 1 amp
+   */
+
+   public static Command ScorePlayoffAuto(){
+    return new SequentialCommandGroup(
+      new WaitCommand(9.0),
+      Auto.getPathPlannerCommandFarAmp(),
+      new WaitCommand(.25),
+      RobotContainer.getInstance().scoreHookDelay().withTimeout(2.),
+      new WaitCommand(.5),
+      new InstantCommand(() -> RobotContainer.getInstance().arm.setArmState(States.ArmPos.STOW), RobotContainer.getInstance().arm),
+      new InstantCommand(() -> RobotContainer.getInstance().hook.setHookState(States.HookPos.STOW), RobotContainer.getInstance().hook),
+      new WaitCommand(.25),
+      Auto.getPathPlannerCommandAutoLeave()
+    );
+  }
   /**
    * Drives to AMP. Scores 1 NOTE. Leave Starting Line and drives to far side of the *
    * Starting Pos, closest to AMP, hugging the subwoofer
@@ -45,6 +72,8 @@ public static Command getPathPlannerCommandAmp() {
       Auto.getPathPlannerCommandExitStartingLine()
     );
   }
+
+
   public static Command driveTime (double xspeed, double ySpeed, double rot, double sec){
     return new RunCommand(
       () -> RobotContainer.getInstance().m_robotDrive.drive(
