@@ -43,14 +43,14 @@ public static Command getPathPlannerCommandAmp() {
 
    public static Command ScorePlayoffAuto(){
     return new SequentialCommandGroup(
-      new WaitCommand(9.0),
+      new WaitCommand(8.5),
       Auto.getPathPlannerCommandFarAmp(),
-      new WaitCommand(.25),
-      RobotContainer.getInstance().scoreHookDelay().withTimeout(2.),
-      new WaitCommand(.5),
+      new WaitCommand(.2),
+      RobotContainer.getInstance().scoreHookDelay().withTimeout(1.5),
+      new WaitCommand(.1),
       new InstantCommand(() -> RobotContainer.getInstance().arm.setArmState(States.ArmPos.STOW), RobotContainer.getInstance().arm),
       new InstantCommand(() -> RobotContainer.getInstance().hook.setHookState(States.HookPos.STOW), RobotContainer.getInstance().hook),
-      new WaitCommand(.25),
+      new WaitCommand(0),
       Auto.getPathPlannerCommandAutoLeave()
     );
   }
