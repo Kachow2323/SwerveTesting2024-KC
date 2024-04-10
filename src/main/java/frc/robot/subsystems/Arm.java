@@ -18,13 +18,21 @@ import frc.utils.Util;
 
 
 public class Arm extends SubsystemBase {
+    /* READ ME:
+     * Creates 2 SparkMAX objects with their CAN ID and Motor Type
+     * We know we have to make one motor follow another motor to sync them up (master & slave motors)
+     * We use encoder values from the internal CANcoder in the SparkMAX to measure revolutions
+     * Use PID Feedback Control Loops to reach armPosition in revolutions which we stored in Constants.java
+     * All Arm Movements are Relative to the armReset Pos at the Hard Stop
+     */
     private static final CANSparkMax motorR = Util.createSparkMAX(ArmConstants.rightArmMotorID, MotorType.kBrushless);
     private static final CANSparkMax motorL = Util.createSparkMAX(ArmConstants.leftArmMotorID, MotorType.kBrushless);
-    // private SparkAbsoluteEncoder armEncoder = motorR.getAbsoluteEncoder(Type.kDutyCycle);
     private RelativeEncoder relArmEncoder = motorR.getEncoder();
 
+    /* READ ME:
+    * Creates a PID Controller which we use to control the motors movement
+    */
     private SparkPIDController pidController;
-    
     
     private static Arm instance;
     public static Arm getInstance() {
@@ -33,26 +41,20 @@ public class Arm extends SubsystemBase {
 
     }
     
-    
     private Arm() {
         resetEncoders();
         motorR.setSmartCurrentLimit(18);
         motorL.setSmartCurrentLimit(18);
-
         motorR.setInverted(false);
-        motorL.follow(motorR, true);
-       
+        motorL.follow(motorR, true); // Slave motors to leading motor to sync them together
         motorR.setIdleMode(IdleMode.kBrake);
         motorL.setIdleMode(IdleMode.kBrake);
-        // armEncoder.setZeroOffset();
-        pidController = motorR.getPIDController();
-        // pidController.setFeedbackDevice(armEncoder);
-        pidController.setP(ArmConstants.kP); //0.1  All values currently set to 0.0
-        pidController.setI(ArmConstants.kI);//0.01
-        pidController.setD(ArmConstants.kD);
-        pidController.setIZone(0);
-        // pidController.setFF(0);
-        pidController.setOutputRange(ArmConstants.pidOutputLow, ArmConstants.pidOutputHigh);
+        pidController = motorR.getPIDController(); //Sets the control of the right motor to speed that the PID controller commanded
+        pidController.setP(ArmConstants.kP); //Proportional Gain 
+        pidController.setI(ArmConstants.kI);// Intergral Gain
+        pidController.setD(ArmConstants.kD); // Derivative Gain
+        pidController.setIZone(0); // DW will be 0 for most of the time
+        pidController.setOutputRange(ArmConstants.pidOutputLow, ArmConstants.pidOutputHigh); // Max and Min output so the robot does rip itself apart
         register();
     }
 
@@ -60,12 +62,6 @@ public class Arm extends SubsystemBase {
 
     public void setOpenLoop(double value) {
         SmartDashboard.putNumber("Arm Commanded arm actuation", value);
-        //code stop if it goes past these values it will break something
-        // if(relArmEncoder.getPosition() >=ArmConstants.max){
-        //     motorR.set(0);
-        // } else{
-        //     motorR.set(value);
-        // }
         motorR.set(value);
         motorL.set(value);
     }
@@ -83,23 +79,22 @@ public class Arm extends SubsystemBase {
     
     @Override
     public void periodic() {
-        // SmartDashboard.putNumber("right Arm abs encoder", (armEncoder).getPosition());
-        // SmartDashboard.putNumber("right Arm abs encoder degrees", 360.0*armEncoder.getPosition());
         SmartDashboard.putNumber("right Arm Relative encoder value", relArmEncoder.getPosition());
         SmartDashboard.putNumber("Right Arm current", motorR.getOutputCurrent());
-        // if(relArmEncoder.getPosition() >= ArmConstants.max){
-        //     stopArm();
-        // }
-
     }
     
-
-
+    /* READ ME:
+     * Select the Setpoint aka reference point for the PID Controller
+     */
     public void setArmPosition(double position) {
         pidController.setReference(position, ControlType.kPosition);
         SmartDashboard.putNumber("Arm SetPoint", position);
     }
 
+    /* READ ME:
+     * Depending on what we input in (ie: button matching), we can select which setpoint we want to go to.
+     * Also used to set the stateCheck for the LED's
+     */
     public void setArmState(States.ArmPos state) {
         SmartDashboard.putNumber("Position", state.val);
         switch (state) {
@@ -134,6 +129,5 @@ public class Arm extends SubsystemBase {
         SmartDashboard.putNumber("encoder value", encoderPosition);
         SmartDashboard.putNumber("current arm position", currentPosition);
     }
-
-    
+  
 }
