@@ -56,11 +56,21 @@ public class RobotContainer {
   public final Arm arm;
   public final Hook hook;
   
-
+  /*READ ME:
+  Creates 2 Xbox Controllers for the Operator and Driver
+  Operator is under Port 1 which is set under Operator Constants in Constants.java
+  Driver is under Port 0 which is set under Driver Constants in Constants.java
+  The class XBoxController is Native to WPILIB and require no external vendordeps
+  */
   private static RobotContainer instance = null;
   private static final XboxController operatorController = new XboxController(Constants.OIConstants.operatorController);
   private static final XboxController driverController = new XboxController(OIConstants.kDriverControllerPort);
 
+  /*READ ME:
+  Sets up the driver and operator buttons on each controller by intializing the buttons (pre-known placements)
+  By pre-mapping each button's location, we can choose which buttons are used and gives us the whole range of the buttons on each XBox Controllers
+  Most of the Buttons will never be used but thats ok. Notice the 9+ unused variables. Leave them alone.
+  */
 
   public static final Trigger driver_A = new JoystickButton(driverController, 1),
     driver_B = new JoystickButton(driverController, 2), driver_X = new JoystickButton(driverController, 3),
@@ -80,6 +90,9 @@ public class RobotContainer {
     driver_DPAD_RIGHT = new POVButton(driverController, 90), driver_DPAD_DOWN = new POVButton(driverController, 180),
     driver_DPAD_LEFT = new POVButton(driverController, 270);
 
+  /*READ ME:
+  Creates a static instance of the Robot Container with all its contents.
+  */
   public static RobotContainer getInstance() {
       if(instance == null) instance = new RobotContainer();
       return instance;
@@ -92,7 +105,7 @@ public class RobotContainer {
     hook = Hook.getInstance();
     m_robotDrive = new DriveSubsystem();
 
-    // Configure the button bindings
+    // Configure the button bindings for each of the controllers
     configureButtonBindings();
 
     // Configure default commands
@@ -107,8 +120,14 @@ public class RobotContainer {
                 true, true),
             m_robotDrive));
 
-    // arm.setDefaultCommand(stowArm());
-    // hook.setDefaultCommand(stowHook());
+    /*READ ME:
+  The default drive command which is defined in DriveSubsystems.java is the main method of drive used in our 2024 Drivetrain.
+  The .drive method takes in 5 parameters which is defined in DriveSubsystems.java (5 parameters: 3 doubles, 2 booleans.)  
+  The 3 doubles are the Left Joysticks X & Y values (-1 thru 1) and Right Joysticks X values (-1 thru 1). - XBoxController
+  Applies a simple deadband onto the read values before passing them into the the method to minimize stick drift
+  If we want field relative control, we set field relative to true and if we want to limit the jerkyness of the drive, we can set rate limit to true
+  Rate limit is basically setting the limit of one request. (ie: controller requests 1.00 but we limit it to 0.8)
+  */
   }
 
   public Command goToPositionBezier(Pose2d target) {
@@ -188,6 +207,12 @@ public class RobotContainer {
         new RunCommand(() -> hook.setHookState(States.HookPos.STOW), hook)
       );
 
+  /*READ ME:
+  Using the above defined button bindings for each of the XboxControllers, we setting commands for them to follow
+  Many of the bindings rely/use the different subsystems (ie: arm, hook, auto)
+  Should be pretty self-explanatory (runCommands on if (true) conditionals)
+  */
+
     operator_Y
       .whileTrue(
         new ParallelCommandGroup(
@@ -204,6 +229,14 @@ public class RobotContainer {
         )
       );
 
+    /* READ ME:
+     * This command runs the SCORE command for the AMP shot in every attempt
+     * By condensing the entire score command into one method we no longer have to keep defining it everywhere and we set the standard for each attempt
+     * Utilizes Constants.java for realtive and absoulte scoring encoder values.
+     * Parrallel Command Group - The command runs at the same time but we put a time delay to calculate the exact timing
+     * We needed the wait command bc we need the momentum from the actuating arm to score into the AMP
+     */
+
     operator_X
       .whileTrue(
        new RunCommand(() -> {
@@ -211,6 +244,10 @@ public class RobotContainer {
         hook.setHookState(States.HookPos.STOW);
        }, arm, hook)
       );
+
+    /* READ ME:
+     * This command runs the STOW command for the arm
+     */
     operator_B
       .whileTrue(
        new RunCommand(() -> {
@@ -220,6 +257,10 @@ public class RobotContainer {
 
        }, m_robotDrive)
       );
+
+     /* READ ME:
+     * WIP auto-align with the AMP april tag. Utilizes the Eyes.java class and Robot.java to detect and find April Tag Offset
+     */
     operator_RB
       .whileTrue(
        new RunCommand(() -> {
@@ -232,6 +273,11 @@ public class RobotContainer {
         arm.setArmState(States.ArmPos.CLIMB_DOWN); 
        }, arm)
       );
+
+       /* READ ME:
+     * These command runs the CLIMB commands for the arm
+     * Utilizes Constants.java for realtive and absoulte climb encoder values.
+     */
   }
 
   public Command stowArm() {
