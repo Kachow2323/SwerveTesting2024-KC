@@ -63,7 +63,7 @@ public class DriveSubsystem extends SubsystemBase {
   private final AHRS Nav_x = new AHRS(Port.kMXP);
 
   // Locations for the swerve drive modules relative to the robot center.
-  // Figure out if distance is in yards in meters
+  // Distance in meters
   Translation2d m_frontLeftLocation = new Translation2d(0.4086, 0.4086);
   Translation2d m_frontRightLocation = new Translation2d(0.4086, -0.4086);
   Translation2d m_backLeftLocation = new Translation2d(-0.4086, 0.4086);
