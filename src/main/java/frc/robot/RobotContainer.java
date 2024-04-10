@@ -135,7 +135,7 @@ public class RobotContainer {
                 true, true),
             m_robotDrive));
 
-     /*READ ME:
+     /*READ ME: ^^^
   The default drive command which is defined in DriveSubsystems.java is the main method of drive used in our 2024 Drivetrain.
   The .drive method takes in 5 parameters which is defined in DriveSubsystems.java (5 parameters: 3 doubles, 2 booleans.)  
   The 3 doubles are the Left Joysticks X & Y values (-1 thru 1) and Right Joysticks X values (-1 thru 1). - XBoxController
@@ -272,17 +272,6 @@ public class RobotContainer {
         new RunCommand(() -> hook.setHookState(States.HookPos.STOW), hook)
       );
 
-    // driver_X.whileTrue(
-    //   goToPosition(
-    //     new Pose2d(0.85, 1.18, Rotation2d.fromDegrees(-90)),
-    //     0, 
-    //     0)
-    // );
-
-    // driver_Y.whileTrue(
-    //   pathFindtoPath("FlyTest")
-    // );
-
     driver_Y.whileTrue(
       goToPosition(
         new Pose2d(0.85, 1.18, Rotation2d.fromDegrees(90)), 0, 0)
@@ -293,11 +282,6 @@ public class RobotContainer {
         new Pose2d(0.85, 1.18, Rotation2d.fromDegrees(90))
       )
     );
-
-    // driver_B.whileTrue(
-    //   goToPositionBezier(
-    //     new Pose2d(0, 0, Rotation2d.fromDegrees(0))
-    //   )
 
     // );
 
@@ -378,25 +362,6 @@ public class RobotContainer {
       
   }
 
-  // public Command stowArm() {
-  //   return new RunCommand(() -> arm.setArmState(States.ArmPos.STOW), arm);
-  // }
-
-  // public Command scoreArm(){
-  //   return new RunCommand(() -> arm.setArmState(States.ArmPos.SCORE), arm);
-  // }
-
-  // public Command stowHook() {
-  //   return new RunCommand(() -> hook.setHookState(States.HookPos.STOW), hook);
-  // }
-
-  // public Command score() {
-  //   return new RunCommand(() -> {
-  //       arm.setArmState(States.ArmPos.SCORE); 
-  //       hook.setHookState(States.HookPos.SCORE);
-  //      }, arm, hook);
-  // }
-
   /* READ ME:
      * This command runs the SCORE command for the AMP shot in AUTO
      * By condensing the entire score command into one method we no longer have to keep defining it everywhere and we set the standard for each attempt
@@ -420,20 +385,9 @@ public class RobotContainer {
         );
   }
 
-  // public void bindOI(){
-
-  //   // driver_X
-  //   //     .onTrue(stowArm());
-    
-  //   driver_Y
-  //       .onTrue(scoreArm());
-
- 
-  // }
-
   /**
    * Returns the current alliance, with false indicating blue and true indicating red.
-   * If there is no alliance, blue alliance is assumed. 
+   * If there is no alliance, blue alliance is assumed. ie: not in match
    *
    * @return The current alliance of the robot.
    */
@@ -444,25 +398,72 @@ public class RobotContainer {
     }
     return false;
   }
-  /**
-   * Use this to pass the autonomous command to the main {@link Robot} class.
-   *
-   * @return the command to run in autonomous
-   */
-  // public Command getPathPlannerCommand1() {
-  //   return new PathPlannerAuto("Simple Auto Part 1");
-  // }
 
-  // public Command getPathPlannerCommand2(){
-  //   return new PathPlannerAuto("Simple Auto Part 2");
-  // }
-
-  //Returns Bool? from FMS
+  //Returns isRed or isBlue from FMS @ Start of the Match
   public static Optional<Alliance> isRedAlliance(){
     return DriverStation.getAlliance();
   }
-
 }
+// ====================================================================================
+/*
+ * Legacy Code:
+ * 
+  public Command getPathPlannerCommand1() {
+    return new PathPlannerAuto("Simple Auto Part 1");
+  }
+
+  public Command getPathPlannerCommand2(){
+    return new PathPlannerAuto("Simple Auto Part 2");
+  }
+
+  public void bindOI(){
+
+    // driver_X
+    //     .onTrue(stowArm());
+    
+    driver_Y
+        .onTrue(scoreArm());
+
+  public Command stowArm() {
+    return new RunCommand(() -> arm.setArmState(States.ArmPos.STOW), arm);
+  }
+
+  public Command scoreArm(){
+    return new RunCommand(() -> arm.setArmState(States.ArmPos.SCORE), arm);
+  }
+
+  public Command stowHook() {
+    return new RunCommand(() -> hook.setHookState(States.HookPos.STOW), hook);
+  }
+
+  public Command score() {
+    return new RunCommand(() -> {
+        arm.setArmState(States.ArmPos.SCORE); 
+        hook.setHookState(States.HookPos.SCORE);
+       }, arm, hook);
+  }
+
+  WORK-IN-PROGRESS/NOT FINISHED Code:
+
+
+    driver_B.whileTrue(
+      goToPositionBezier(
+        new Pose2d(0, 0, Rotation2d.fromDegrees(0))
+      )
+
+    driver_X.whileTrue(
+      goToPosition(
+        new Pose2d(0.85, 1.18, Rotation2d.fromDegrees(-90)),
+        0, 
+        0)
+    );
+
+    driver_Y.whileTrue(
+      pathFindtoPath("FlyTest")
+    );
+
+ */
+
 
 /* 2023-2024 For-TEA-Simo Java Code by:
 
