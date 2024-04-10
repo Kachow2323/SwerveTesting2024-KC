@@ -14,7 +14,12 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.States.ArmPos;
 import frc.robot.States.HookPos;
 
-public class LED extends SubsystemBase { 
+public class LED extends SubsystemBase {
+    /* READ ME:
+     * For the 2024 season, we used the REV Blinkins for controlling LED strips
+     * The name of the REV BlinkIns are labeled under "sparks" and go on the I2C port on the RoboRIO
+     * Idea: Check the state of the arm and correspond it to the correct color 
+     */
     private static Spark spark;
     public static ArmPos armPosition;
     public static HookPos hookPosition;
@@ -26,6 +31,10 @@ public class LED extends SubsystemBase {
     // IR Sensor from REV Color Sensore V3
     private final static I2C.Port i2cPort = I2C.Port.kOnboard;
     private final static ColorSensorV3 m_colorSensor = new ColorSensorV3(i2cPort);
+
+    /* READ ME:
+     * The color sensor v3 can double as an IR sensor for rangefinding distance (Distance: 0 - 2047)
+     */
     private  static double IR = m_colorSensor.getIR();
 
     private final Color kBlackTarget = new Color(0.0, 0.0, 0.0);
@@ -39,6 +48,11 @@ public class LED extends SubsystemBase {
         colorSensor = new ColorSensorV3(Port.kOnboard);
         colorMatcher.addColorMatch(kBlackTarget);
     }
+
+    /* READ ME:
+     * Checks the what the current pos of the arm is in
+     * If the arm is a desired commanded position, we set the color of the spark through setting its speed (-1.0 thu 1.0)
+     */
     public void lightStateCheck(ArmPos pos) {
         switch (pos) {
             case STOW:
@@ -71,20 +85,8 @@ public class LED extends SubsystemBase {
         int proximity = m_colorSensor.getProximity();
         SmartDashboard.putNumber("Proximity", proximity);
 
-        // if(proximity >= 161){
-        //     System.out.println("Detected");
-        //     lightStateCheck(ArmPos.SCORE);
-        // }else{
-        //     System.out.print("Not detected");
-        //     lightStateCheck(armPosition);
-        // }
-        // if (colorSensor.getColor().equals(Color.kBlack)) {
-        //     spark.set(-0.57);
-        // } else spark.set(0.99);
-        //spark.set(0.99);
         lightStateCheck(armPosition);
         SmartDashboard.putNumber("Current LED", spark.get());
-        //else armAndHookStateCheck(armPosition, hookPosition);
         
     }
 
@@ -95,6 +97,20 @@ public class LED extends SubsystemBase {
     }
 }
 
-
+// ==================================================================
+/*
+ * LEGACY CODE:
+ * if(proximity >= 161){
+            System.out.println("Detected");
+            lightStateCheck(ArmPos.SCORE);
+        }else{
+            System.out.print("Not detected");
+            lightStateCheck(armPosition);
+        }
+        if (colorSensor.getColor().equals(Color.kBlack)) {
+            spark.set(-0.57);
+        } else spark.set(0.99);
+        spark.set(0.99);
+ */
 
 
