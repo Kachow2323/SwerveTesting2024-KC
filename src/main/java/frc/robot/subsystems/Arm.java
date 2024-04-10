@@ -24,7 +24,6 @@ public class Arm extends SubsystemBase {
     private RelativeEncoder relArmEncoder = motorR.getEncoder();
 
     private SparkPIDController pidController;
-    private SparkPIDController climbPidController;
     
     
     private static Arm instance;

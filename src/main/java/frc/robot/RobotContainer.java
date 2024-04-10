@@ -404,6 +404,22 @@ public class RobotContainer {
     return DriverStation.getAlliance();
   }
 }
+
+/* 2023-2024 For-TEA-Simo Java Code by:
+
+Kaden J. Chow - Programming Lead - MHS 2026 - https://github.com/Kachow2323
+Ronit Barman - Tech Captain - MHS 2024
+Joshua Seo - Programming - MHS 2027
+Adam Situ - Asst. Programming Lead - MHS 2027
+Michelle Y - Asst. Programming Lead - MHS 2025
+
+With Invaluable Help from:
+  Mentor John :D
+  Mentor Lauren :D
+  Mentor Katie :D
+  Everyone else from inside and outside of 253
+*/
+
 // ====================================================================================
 /*
  * Legacy Code:
@@ -463,19 +479,3 @@ public class RobotContainer {
     );
 
  */
-
-
-/* 2023-2024 For-TEA-Simo Java Code by:
-
-Kaden J. Chow - Programming Lead - MHS 2026 - https://github.com/Kachow2323
-Ronit Barman - Tech Captain - MHS 2024
-Joshua Seo - Programming - MHS 2027
-Adam Situ - Asst. Programming Lead - MHS 2027
-Michelle Y - Asst. Programming Lead - MHS 2025
-
-With Invaluable Help from:
-  Mentor John :D
-  Mentor Lauren :D
-  Mentor Katie :D
-  Everyone else from inside and outside of 253
-*/
