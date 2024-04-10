@@ -60,6 +60,12 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     m_robotContainer = RobotContainer.getInstance();
+
+    /* READ ME:
+     * Select an Auto from the m_chooser on SmartDashboard
+     * Advantages: Drive Teams chooses their own auto without having to
+     */
+    
     m_chooser.setDefaultOption("No Auto", Auto.driveTime(0, 0, 0, 0));
     m_chooser.addOption("One note score BLUE/RED", Auto.ScoreAutoOneNoteAmp());
     m_chooser.addOption("Drive forward BLUE/RED", Auto.driveAutoCommand());
@@ -224,12 +230,10 @@ public class Robot extends TimedRobot {
 
     detector.close();
   }
+
   /**
    * This function is called every 20 ms, no matter the mode. Use this for items like diagnostics
    * that you want ran during disabled, autonomous, teleoperated and test.
-   *
-   * <p>This runs after the mode specific periodic functions, but before LiveWindow and
-   * SmartDashboard integrated updating.
    */
   @Override
   public void robotPeriodic() {
@@ -250,9 +254,17 @@ public class Robot extends TimedRobot {
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
+    /* READ ME:
+     * Select an Auto from the m_chooser on SmartDashboard
+     * Advantages: Drive Teams chooses their own auto without having to
+     */
     m_autonomousCommand = m_chooser.getSelected();
      System.out.println("AUTO SELECTED: " + m_autonomousCommand);
-    //m_autonomousCommand = Auto.ScoreAutoOneNoteAmp();
+
+     //===============================
+     //Legcacy Code
+    // m_autonomousCommand = Auto.RedAmpAuto();
+      //m_autonomousCommand = Auto.ScoreAutoOneNoteAmp();
     // m_autonomousCommand = Auto.driveTime(1,1 ,1 ,1 ); // replace with actual values
     // m_autonomousCommand = null;
     // m_autonomousCommand = Auto.driveAutoCommand();
@@ -262,10 +274,6 @@ public class Robot extends TimedRobot {
      * = new MyAutoCommand(); break; case "Default Auto": default:
      * autonomousCommand = new ExampleCommand(); break; }
      */
-
-     //===============================
-     //Legcacy Code
-    // m_autonomousCommand = Auto.RedAmpAuto();
 
 
     // schedule the autonomous command (example)
