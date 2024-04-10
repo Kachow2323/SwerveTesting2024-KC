@@ -51,13 +51,16 @@ import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.util.PathPlannerLogging;
 
 /*
- * This class is where the bulk of the robot should be declared.  Since Command-based is a
+ * This class is where the bulk of the robot (including the subsystems) should be declared.  Since Command-based is a
  * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
  * periodic methods (other than the scheduler calls).  Instead, the structure of the robot
  * (including subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-  // The robot's subsystems
+  // 
+  /*READ ME:
+  The robot's subsystems
+  */
   public final DriveSubsystem m_robotDrive;
   public final Arm arm;
   public final Hook hook;
@@ -65,10 +68,22 @@ public class RobotContainer {
   
   public final Field2d field;
 
+  /*READ ME:
+  Creates 2 Xbox Controllers for the Operator and Driver
+  Operator is under Port 1 which is set under Operator Constants in Constants.java
+  Driver is under Port 0 which is set under Driver Constants in Constants.java
+  The class XBoxController is Native to WPILIB and require no external vendordeps
+  */
+
   private static RobotContainer instance = null;
   private static final XboxController operatorController = new XboxController(Constants.OIConstants.operatorController);
   private static final XboxController driverController = new XboxController(OIConstants.kDriverControllerPort);
 
+/*READ ME:
+  Sets up the driver and operator buttons on each controller by intializing the buttons (pre-known placements)
+  By pre-mapping each button's location, we can choose which buttons are used and gives us the whole range of the buttons on each XBox Controllers
+  Most of the Buttons will never be used but thats ok. Notice the 9+ unused variables. Leave them alone.
+  */
 
   public static final Trigger driver_A = new JoystickButton(driverController, 1),
     driver_B = new JoystickButton(driverController, 2), driver_X = new JoystickButton(driverController, 3),
@@ -87,6 +102,10 @@ public class RobotContainer {
   private static final POVButton driver_DPAD_UP = new POVButton(driverController, 0),
     driver_DPAD_RIGHT = new POVButton(driverController, 90), driver_DPAD_DOWN = new POVButton(driverController, 180),
     driver_DPAD_LEFT = new POVButton(driverController, 270);
+
+   /*READ ME:
+  A static instance of the Robot Container with all its contents
+  */
 
   public static RobotContainer getInstance() {
       if(instance == null) instance = new RobotContainer();
@@ -116,8 +135,14 @@ public class RobotContainer {
                 true, true),
             m_robotDrive));
 
-    // arm.setDefaultCommand(stowArm());
-    // hook.setDefaultCommand(stowHook());
+     /*READ ME:
+  The default drive command which is defined in DriveSubsystems.java is the main method of drive used in our 2024 Drivetrain.
+  The .drive method takes in 5 parameters which is defined in DriveSubsystems.java (5 parameters: 3 doubles, 2 booleans.)  
+  The 3 doubles are the Left Joysticks X & Y values (-1 thru 1) and Right Joysticks X values (-1 thru 1). - XBoxController
+  Applies a simple deadband onto the read values before passing them into the the method to minimize stick drift
+  If we want field relative control, we set field relative to true and if we want to limit the jerkyness of the drive, we can set rate limit to true
+  Rate limit is basically setting the limit of one request. (ie: controller requests 1.00 but we limit it to 0.8)
+  */
 
     field = new Field2d();
     
@@ -209,22 +234,34 @@ public class RobotContainer {
    * passing it to a
    * {@link JoystickButton}.
    */
+
+   /*READ ME:
+  Using the above defined button bindings for each of the XboxControllers, we setting commands for them to follow
+  Many of the bindings rely/use the different subsystems (ie: arm, hook, auto)
+  Should be pretty self-explanatory (runCommands on logic conditionals)
+  */
+
   private void configureButtonBindings() {
     driver_DPAD_RIGHT.whileTrue(
-      new RunCommand(() -> arm.setOpenLoop(.2), arm)
-      ).onFalse(new InstantCommand(() -> arm.setOpenLoop(0)));
+      new RunCommand(() -> arm.setOpenLoop(.2), arm))
+        .onFalse(new InstantCommand(() -> arm.setOpenLoop(0))
+        );
 
     driver_DPAD_LEFT.whileTrue(
-      new RunCommand(() -> arm.setOpenLoop(-.2), arm)
-      ).onFalse(new InstantCommand(() -> arm.setOpenLoop(0)));
-    driver_DPAD_UP.whileTrue(
-      new RunCommand(() -> hook.setOpenLoop(0.1), hook)
-      ).onFalse(new InstantCommand(() -> hook.setOpenLoop(0)));
+      new RunCommand(() -> arm.setOpenLoop(-.2), arm))
+        .onFalse(new InstantCommand(() -> arm.setOpenLoop(0))
+        );
 
-    driver_DPAD_DOWN.
-    whileTrue(
-      new RunCommand(() -> hook.setOpenLoop(-0.1), hook)
-      ).onFalse(new InstantCommand(() -> hook.setOpenLoop(0)));
+    driver_DPAD_UP.whileTrue(
+      new RunCommand(() -> hook.setOpenLoop(0.1), hook))
+        .onFalse(new InstantCommand(() -> hook.setOpenLoop(0))
+        );
+
+    driver_DPAD_DOWN
+    .whileTrue(
+      new RunCommand(() -> hook.setOpenLoop(-0.1), hook))
+        .onFalse(new InstantCommand(() -> hook.setOpenLoop(0))
+        );
 
     driver_RB
       .whileTrue(
@@ -264,7 +301,13 @@ public class RobotContainer {
 
     // );
 
-   
+   /* READ ME:
+     * This command runs the SCORE command for the AMP shot in every attempt execpt AUTO
+     * By condensing the entire score command into one method we no longer have to keep defining it everywhere and we set the standard for each attempt
+     * Utilizes Constants.java for realtive and absoulte scoring encoder values.
+     * Parrallel Command Group - The command runs at the same time but we put a time delay to calculate the exact timing
+     * We needed the wait command bc we need the momentum from the swinign arm to score into the AMP
+     */
 
     operator_Y
       .whileTrue(
@@ -282,6 +325,13 @@ public class RobotContainer {
         )
       );
 
+    /* READ ME:
+     * This command runs the STOW command for the AMP shot in every attempt execpt AUTO
+     * Utilizes Constants.java for realtive and absoulte scoring encoder values.
+     * Parrallel Command Group - The command runs at the same time but we put a time delay to calculate the exact timing
+     * Exact Replica of the SCORE basically without time delay
+     */
+
     operator_X
       .whileTrue(
        new RunCommand(() -> {
@@ -289,6 +339,13 @@ public class RobotContainer {
         hook.setHookState(States.HookPos.STOW);
        }, arm, hook)
       );
+
+    /* READ ME:
+     * This command runs the Auto-Align command for the AMP shot - WIP
+     * Utilizes Eyes.java and Robot.java to run vision code and calculate the wanted rotation rate
+     * Aligns with the amp along the Z-axis rotationally but will not align with the amp from the X&Y-axis transversely
+     */
+
     operator_B
       .whileTrue(
        new RunCommand(() -> {
@@ -298,6 +355,13 @@ public class RobotContainer {
 
        }, m_robotDrive)
       );
+
+      /* READ ME:
+     * This command runs the CLIMBUP & CLIMBDOWN command for the endgame chain climb in TELEOP
+     * Utilizes Constants.java for realtive and absoulte scoring encoder values.
+     * Exact Replica of the SCORE basically without time delay
+     */
+
     operator_RB
       .whileTrue(
        new RunCommand(() -> {
@@ -314,24 +378,32 @@ public class RobotContainer {
       
   }
 
-  public Command stowArm() {
-    return new RunCommand(() -> arm.setArmState(States.ArmPos.STOW), arm);
-  }
+  // public Command stowArm() {
+  //   return new RunCommand(() -> arm.setArmState(States.ArmPos.STOW), arm);
+  // }
 
-  public Command scoreArm(){
-    return new RunCommand(() -> arm.setArmState(States.ArmPos.SCORE), arm);
-  }
+  // public Command scoreArm(){
+  //   return new RunCommand(() -> arm.setArmState(States.ArmPos.SCORE), arm);
+  // }
 
-  public Command stowHook() {
-    return new RunCommand(() -> hook.setHookState(States.HookPos.STOW), hook);
-  }
+  // public Command stowHook() {
+  //   return new RunCommand(() -> hook.setHookState(States.HookPos.STOW), hook);
+  // }
 
-  public Command score() {
-    return new RunCommand(() -> {
-        arm.setArmState(States.ArmPos.SCORE); 
-        hook.setHookState(States.HookPos.SCORE);
-       }, arm, hook);
-  }
+  // public Command score() {
+  //   return new RunCommand(() -> {
+  //       arm.setArmState(States.ArmPos.SCORE); 
+  //       hook.setHookState(States.HookPos.SCORE);
+  //      }, arm, hook);
+  // }
+
+  /* READ ME:
+     * This command runs the SCORE command for the AMP shot in AUTO
+     * By condensing the entire score command into one method we no longer have to keep defining it everywhere and we set the standard for each attempt
+     * Utilizes Constants.java for realtive and absoulte scoring encoder values.
+     * Parrallel Command Group - The command runs at the same time but we put a time delay to calculate the exact timing
+     * We needed the wait command bc we need the momentum from the swinign arm to score into the AMP
+     */
 
   public Command scoreHookDelay() {
     return new ParallelCommandGroup(
@@ -348,16 +420,16 @@ public class RobotContainer {
         );
   }
 
-  public void bindOI(){
+  // public void bindOI(){
 
-    // driver_X
-    //     .onTrue(stowArm());
+  //   // driver_X
+  //   //     .onTrue(stowArm());
     
-    driver_Y
-        .onTrue(scoreArm());
+  //   driver_Y
+  //       .onTrue(scoreArm());
 
  
-  }
+  // }
 
   /**
    * Returns the current alliance, with false indicating blue and true indicating red.
@@ -391,3 +463,18 @@ public class RobotContainer {
   }
 
 }
+
+/* 2023-2024 For-TEA-Simo Java Code by:
+
+Kaden J. Chow - Programming Lead - MHS 2026 - https://github.com/Kachow2323
+Ronit Barman - Tech Captain - MHS 2024
+Joshua Seo - Programming - MHS 2027
+Adam Situ - Asst. Programming Lead - MHS 2027
+Michelle Y - Asst. Programming Lead - MHS 2025
+
+With Invaluable Help from:
+  Mentor John :D
+  Mentor Lauren :D
+  Mentor Katie :D
+  Everyone else from inside and outside of 253
+*/
