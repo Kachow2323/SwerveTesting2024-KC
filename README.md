@@ -1,10 +1,10 @@
-# MAXSwerve Java Template v202(4).1
+# MAXSwerve Java Template v202(4).1 - Swerve Testing 2024 Docs
 
 See [the online changelog](https://github.com/REVrobotics/MAXSwerve-Java-Template/blob/main/CHANGELOG.md) for information about updates to the template that may have been released since you created your project.
 
 ## Description
 
-A template project for an FRC swerve drivetrain that uses REV MAXSwerve Modules.
+A edited template project used for experimentation and testing of the MAXSwerve Modules during the 2024 season. This project is configured for usage in conjuction with the NavX Gyro (AHRS). Check template pull requests for NavX changes.
 
 ## Prerequisites
 
